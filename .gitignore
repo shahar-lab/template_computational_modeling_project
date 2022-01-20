@@ -1,6 +1,7 @@
 *.rdata
 *.csv
-
+archive/
+graphics/
 
 # History files
 .Rhistory
