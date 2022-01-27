@@ -1,14 +1,13 @@
-*.rdata
-*.csv
-archive/
-graphics/
-
+data/
+misc/
+.RData
+!functions/working_model.rdata
 # History files
 .Rhistory
 .Rapp.history
 
 # Session Data files
-.RData
+
 
 # User-specific files
 .Ruserdata
