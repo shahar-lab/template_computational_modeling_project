@@ -2,9 +2,10 @@
 #This code generate artificial model parameters in an hierarchical structure
 
 rm(list=ls())
-mymodel   =read.table('./modeling/working_model.txt')
-data_path =paste0('./data/model_',mymodel)
-model_path=paste0('./modeling/model_',mymodel)
+source('./functions/my_packages.R')
+source('./functions/my_starter.R')
+
+
 #--------------------------------------------------------------------------------------------------------
 
 
@@ -12,22 +13,24 @@ model_path=paste0('./modeling/model_',mymodel)
 Nsubjects =50 
 
 #true population level parameters
-population_locations    =c(qlogis(0.5),4) #population mean 
-population_scales       =c(1,1.5)                  #population sd for
-population_parameters   =list(mymodel,Nsubjects,population_locations,population_scales)
+population_locations    =c(qlogis(0.5),qlogis(0.3),4) #population mean 
+population_scales       =c(1,1,1.5)                  #population sd for
+population_parameters   =list(Nsubjects,population_locations,population_scales)
 
-save(population_parameters, file=paste0(data_path,'/simulate_population_parameters.Rdata'))
+save(population_parameters, file=paste0(path$data,'/simulate_population_parameters.Rdata'))
 
 #individual parameters 
-alpha_chosen   = plogis(population_locations[1]+population_scales[1]*rnorm(Nsubjects))
-beta           =       (population_locations[2]+population_scales[2]*rnorm(Nsubjects))
+alpha1        = plogis(population_locations[1]+population_scales[1]*rnorm(Nsubjects))
+alpha2        = plogis(population_locations[2]+population_scales[2]*rnorm(Nsubjects))
+beta          =       (population_locations[3]+population_scales[3]*rnorm(Nsubjects))
 
 
 #save
 individual_parameters= 
   
   cbind(subject=seq(1,Nsubjects),
-        alpha_chosen   =alpha_chosen,
-        beta           =beta)
+        alpha1  =alpha1,
+        alpha2  =alpha2,
+        beta   =beta)
 
-save(individual_parameters,file=paste0(data_path,'/simulate_individual_parameters.Rdata'))
+save(individual_parameters,file=paste0(path$data,'/simulate_individual_parameters.Rdata'))

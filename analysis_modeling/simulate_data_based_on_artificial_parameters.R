@@ -1,13 +1,13 @@
 #This code generate artificial data based on simulated parameters
 
 rm(list=ls())
-mymodel   =read.table('./modeling/working_model.txt')
-data_path =paste0('./data/model_',mymodel)
-model_path=paste0('./modeling/model_',mymodel,'/',mymodel,'_')
+source('./functions/my_packages.R')
+source('./functions/my_starter.R')
+
 #--------------------------------------------------------------------------------------------------------
 
 #load parameters
-load(paste0(data_path,'/simulate_individual_parameters.Rdata'))
+load(paste0(path$data,'/simulate_individual_parameters.Rdata'))
 
 
 #set sample size
@@ -21,7 +21,7 @@ cfg = list(Nblocks         =4,
            rndwlk          =read.csv('./functions/rndwlk.csv',header=F))
 
 #run simulation
-source(paste0(model_path,'model.r'))
+source(paste0(path$model,'model.r'))
 
 df=data.frame()
 for (subject in 1:Nsubjects) {
@@ -29,7 +29,7 @@ for (subject in 1:Nsubjects) {
 }
 
 #save
-save(df,file=paste0(data_path,'/simulate_data_based_on_artificial_parameters.Rdata'))
+save(df,file=paste0(path$data,'/simulate_data_based_on_artificial_parameters.Rdata'))
 
 
 ###convert to a standata format ###----------------------------------------------------------------------------------
@@ -49,6 +49,6 @@ data_for_stan<-make_mystandata(data=df,
                                  'selected_offer'),
                                additional_arguments=list(Narms=4, Nraffle=2))
 
-save(data_for_stan,file=paste0(data_path,'/simulate_standata_based_on_artificial_parameters.Rdata'))
+save(data_for_stan,file=paste0(path$data,'/simulate_standata_based_on_artificial_parameters.Rdata'))
 
 

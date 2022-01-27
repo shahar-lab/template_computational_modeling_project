@@ -1,5 +1,7 @@
 rm(list=ls())
-myfolder='./model_double_updating/'
+source('./functions/my_packages.R')
+source('./functions/my_starter.R')
+
 #--------------------------------------------------------------------------------------------------------
 
 

@@ -1,11 +1,13 @@
 #This code generate artificial data based on simulated parameters
 
 rm(list=ls())
-myfolder='./model_double_updating/'
+source('./functions/my_packages.R')
+source('./functions/my_starter.R')
+
 #--------------------------------------------------------------------------------------------------------
 
 #load parameters
-load(paste0(myfolder,'data/modelfit_estimated_parameters_based_on_empirical_data.rdata'))
+load(paste0(path$data,'/modelfit_estimated_parameters_based_on_empirical_data.rdata'))
 
 #set sample size
 Nsubjects =dim(pars$alpha_ch)[2] 
@@ -24,7 +26,7 @@ cfg = list(Nblocks         =4,
            rndwlk          =read.csv('./functions/rndwlk.csv',header=F))
 
 #run simulation
-source(paste0(myfolder,'files/model.R'))
+source(paste0(path$model,'model.R'))
 
 df=data.frame()
 for (subject in 1:Nsubjects) {
@@ -32,6 +34,6 @@ for (subject in 1:Nsubjects) {
 }
 
 #save
-save(df,file=paste0(myfolder,'data/simulate_data_based_on_empirical_parameters.Rdata'))
+save(df,file=paste0(path$data,'simulate_data_based_on_empirical_parameters.Rdata'))
 
 

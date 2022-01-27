@@ -1,8 +1,8 @@
 #aim: Hierarchical fit Stan 
 rm(list=ls())
-mymodel   =read.table('./modeling/working_model.txt')
-data_path =paste0('./data/model_',mymodel)
-model_path=paste0('./modeling/model_',mymodel,'/',mymodel,'_')
+source('./functions/my_packages.R')
+source('./functions/my_starter.R')
+
 #--------------------------------------------------------------------------------------------------------
 
 #load data

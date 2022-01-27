@@ -1,7 +1,12 @@
 #load project packages
-source('./functions/my_packages.r')
+library(svDialogs)
 source('./functions/set_workingmodel.r')
+source('./functions/add_workingmodel.r')
 source('./functions/my_posteriorplot.R')
 source('./functions/my_xyplot.R')
+source('./functions/remove_workingmodel.r')
+
+path=set_workingmodel()
+
 
 
