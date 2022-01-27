@@ -1,6 +1,9 @@
 #This code plot recovered parameters against the true parameters
 
 rm(list=ls())
+source('./functions/my_packages.R')
+source('./functions/my_starter.R')
+
 # samples x observations
 
 #--------------------------------------------------------------------------------------------------------

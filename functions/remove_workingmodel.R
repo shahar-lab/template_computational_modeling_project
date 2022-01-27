@@ -1,15 +1,11 @@
 #### this function opens a dialog allowing the enter the name of a new model
 #### the new models is then updated in three locations: the "working_model.txt" files, models and data directories.
 
-add_workingmodel<-function(){
+remove_workingmodel<-function(){
 load('functions/working_model.rdata')
-new_modelname=dlg_input(message = "Enter name for your new model:")
-
-mymodels_list=c(mymodels_list,new_modelname$res)
-
-dir.create(paste0('models/model_',new_modelname$res))
-dir.create(paste0('data/model_',new_modelname$res))
-
+mymodel      =dlg_list(title='select model to remove:',mymodels_list, multiple = TRUE)$res
+mymodels_list=mymodels_list[mymodels_list!=mymodel]
+print (paste0(mymodel,'was removed from the models list'))
 save(mymodels_list,file='functions/working_model.rdata')
 }
 
