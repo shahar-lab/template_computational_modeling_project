@@ -20,14 +20,23 @@ like=
     print(mytestfold)
     data_for_stan$testfold=mytestfold
     
-    fit<- sampling(my_compiledmodel, 
-                   data=data_for_stan, 
-                   pars=c('log_lik'),
-                   iter=2000,
-                   warmup = 1000,
-                   chains=4,
-                   cores =4) 
-    pars=rstan::extract(fit)
+    fit <- my_compiledmodel$sample(
+                    data = data_for_stan, 
+                    iter_sampling = 500,
+                    iter_warmup = 500,
+                    chains = 2,
+                    parallel_chains = 2)
+    
+    # fit<- sampling(my_compiledmodel, 
+    #                data=data_for_stan, 
+    #                pars=c('log_lik'),
+    #                iter=2000,
+    #                warmup = 1000,
+    #                chains=4,
+    #                cores =4) 
+    
+    pars <- as_draws_df(fit$draws())
+    #pars=rstan::extract(fit)
     pars$log_lik
   })
 

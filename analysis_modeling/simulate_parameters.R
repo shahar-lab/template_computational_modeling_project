@@ -13,24 +13,23 @@ source('./functions/my_starter.R')
 Nsubjects =50 
 
 #true population level parameters
-population_locations    =c(qlogis(0.5),qlogis(0.3),4) #population mean 
-population_scales       =c(1,1,1.5)                  #population sd for
+population_locations    =c(qlogis(0.3),4) #population mean 
+population_scales       =c(1,1.5)                  #population sd for
 population_parameters   =list(Nsubjects,population_locations,population_scales)
 
 save(population_parameters, file=paste0(path$data,'/simulate_population_parameters.Rdata'))
 
 #individual parameters 
-alpha1        = plogis(population_locations[1]+population_scales[1]*rnorm(Nsubjects))
-alpha2        = plogis(population_locations[2]+population_scales[2]*rnorm(Nsubjects))
-beta          =       (population_locations[3]+population_scales[3]*rnorm(Nsubjects))
+alpha       = plogis(population_locations[1]+population_scales[1]*rnorm(Nsubjects))
+beta        =       (population_locations[2]+population_scales[2]*rnorm(Nsubjects))
 
 
 #save
 individual_parameters= 
   
   cbind(subject=seq(1,Nsubjects),
-        alpha1  =alpha1,
-        alpha2  =alpha2,
+        alpha  =alpha,
         beta   =beta)
 
 save(individual_parameters,file=paste0(path$data,'/simulate_individual_parameters.Rdata'))
+

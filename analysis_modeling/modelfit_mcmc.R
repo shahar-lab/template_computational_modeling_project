@@ -6,29 +6,28 @@ source('./functions/my_starter.R')
 #--------------------------------------------------------------------------------------------------------
 
 #load data
-load('./data/empirical data/empirical_data_standata.rdata')
-#load(paste0(data_path,'/simulate_standata_based_on_artificial_parameters.rdata'))
-load(paste0(data_path,'/modelfit_compile.rdata'))
+load(paste0(path$data,'/simulate_standata_based_on_artificial_parameters.rdata'))
+load(paste0(path$data,'/modelfit_compile.rdata'))
 
 {
   start_time <- Sys.time()
 
-    rl_fit<- sampling(my_compiledmodel, 
-                data=data_for_stan, 
-                iter=1000,
-                warmup = 500,
-                chains=2,
-                cores =2) 
+    rl_fit<- my_compiledmodel$sample(
+                data = data_for_stan, 
+                iter_sampling = 500,
+                iter_warmup = 500,
+                chains = 2,
+                parallel_chains = 2) 
 
   end_time <- Sys.time()
   end_time-start_time
 }
 
 #save
-saveRDS(rl_fit, paste0(data_path,'/modelfit_based_on_empirical_data.rds'))
+saveRDS(rl_fit, paste0(path$data,'/modelfit_based_on_empirical_data.rds'))
 
-pars <- rstan::extract(rl_fit, permuted = TRUE)
-save(pars, file=paste0(data_path,'/modelfit_based_on_artificial_data.rdata'))
+pars <- as_draws_df(rl_fit$draws())
+save(pars, file=paste0(path$data,'/modelfit_based_on_artificial_data.rdata'))
 
 
 

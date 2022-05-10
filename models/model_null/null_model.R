@@ -7,7 +7,7 @@ sim.block = function(subject,parameters,cfg){
   #set parameters
   alpha = parameters['alpha']
   beta  = parameters['beta']
-
+  
   #set initial var
   Narms              = cfg$Narms
   Nraffle            = cfg$Nraffle

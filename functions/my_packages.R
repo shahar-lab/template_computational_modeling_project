@@ -1,6 +1,8 @@
 
 
 library(rstan) 
+library(cmdstanr)
+library(posterior)
 library(loo)
 library(parallel)
 library(bayesplot)
