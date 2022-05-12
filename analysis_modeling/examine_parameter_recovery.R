@@ -11,19 +11,19 @@ library(ggpubr)
 library(bayestestR)
 
 #population level parameters
-load(paste0(data_path,'/simulate_population_parameters.Rdata'))
-load(paste0(data_path,'/modelfit_based_on_artificial_data.rdata'))
+load(paste0(path$data,'/simulate_population_parameters.Rdata'))
+load(paste0(path$data,'/modelfit_based_on_artificial_data.rdata'))
 
-my_posteriorplot(x       = plogis(pars$population_locations[,1]),
+my_posteriorplot(x       = plogis(pars$`population_locations[1]`), 
                      myxlim  = c(0,1),
-                     my_vline= plogis(population_parameters[[3]][1]), 
+                     my_vline= plogis(population_parameters[[2]][1]), 
                      myxlab  = expression(alpha['location']),
                      mycolor = "pink")
 
 
-my_posteriorplot(x       = pars$population_locations[,2],
+my_posteriorplot(x       = pars$`population_locations[2]`,
                      myxlim  = c(0.5,5),
-                     my_vline= population_parameters[[3]][2], 
+                     my_vline= population_parameters[[2]][2], 
                      myxlab  = expression(beta['location']),
                      mycolor = "pink")
 

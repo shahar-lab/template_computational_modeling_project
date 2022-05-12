@@ -1,3 +1,30 @@
+functions {
+  //first we define the type of variable the function will return (here an array of real numbers)
+  void null_lp (int Nsubjects,int Nblocks, int Ntrials, int[] Ntrials_per_subject,int Narms,vector Qvalue_initial, int Nraffle, int[,] choice,int[,] reward, int [,] offer1, int [,] offer2,int [,] selected_offer, int [,] first_trial_in_block,vector beta,vector alpha )
+  {
+for (subject in 1:Nsubjects){
+    vector[Narms] Qcard; 
+    vector[Nraffle] Qoffer; 
+ 
+      for (trial in 1:Ntrials_per_subject[subject]){
+        if (first_trial_in_block[subject,trial] == 1) {
+                        Qcard=Qvalue_initial;
+        }
+
+          Qoffer[1]=Qcard[offer1[subject,trial]];
+          Qoffer[2]=Qcard[offer2[subject,trial]];
+
+        //like function
+         selected_offer[subject, trial] ~ categorical_logit(beta[subject] * Qoffer);
+
+        //Qvalues update
+        Qcard[choice[subject,trial]] += alpha[subject] * (reward[subject,trial] - Qcard[choice[subject,trial]]);
+
+      } 
+  }
+    return;
+}
+}
 data {
 
   //General fixed parameters for the experiment/models
@@ -9,7 +36,6 @@ data {
   int<lower = 2> Nraffle;                                           
 
 
-
   //Behavioral data:
   int<lower = 0> choice[Nsubjects,Ntrials];              
   int<lower = 0> reward[Nsubjects,Ntrials];              
@@ -18,6 +44,7 @@ data {
   int<lower = 0> selected_offer[Nsubjects,Ntrials];      
   int<lower = 0> first_trial_in_block[Nsubjects,Ntrials];
 }
+
 
 transformed data{
   int<lower = 1> Nparameters=2; 
@@ -61,26 +88,5 @@ model {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Likelihood function per subject per trial
-
-  for (subject in 1:Nsubjects){
-    vector[Narms] Qcard; 
-    vector[Nraffle] Qoffer; 
-    
- 
-      for (trial in 1:Ntrials_per_subject[subject]){
-        if (first_trial_in_block[subject,trial] == 1) {
-                        Qcard=Qvalue_initial;
-        }
-
-          Qoffer[1]=Qcard[offer1[subject,trial]];
-          Qoffer[2]=Qcard[offer2[subject,trial]];
-
-        //like function
-         selected_offer[subject, trial] ~ categorical_logit(beta[subject] * Qoffer);
-
-        //Qvalues update
-        Qcard[choice[subject,trial]] += alpha[subject] * (reward[subject,trial] - Qcard[choice[subject,trial]]);
-
-      } 
-  }
+  null_lp(Nsubjects, Nblocks,  Ntrials,  Ntrials_per_subject,Narms,Qvalue_initial, Nraffle, choice,reward,  offer1, offer2,selected_offer,  first_trial_in_block, beta,alpha );
 }

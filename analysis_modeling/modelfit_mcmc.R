@@ -26,7 +26,7 @@ load(paste0(path$data,'/modelfit_compile.rdata'))
 #save
 saveRDS(rl_fit, paste0(path$data,'/modelfit_based_on_empirical_data.rds'))
 
-pars <- as_draws_df(rl_fit$draws())
+pars <- as_draws_df(rl_fit$draws())  #column names are saved inappropriately here.
 save(pars, file=paste0(path$data,'/modelfit_based_on_artificial_data.rdata'))
 
 
