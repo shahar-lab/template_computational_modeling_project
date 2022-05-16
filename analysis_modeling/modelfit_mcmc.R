@@ -14,10 +14,10 @@ load(paste0(path$data,'/modelfit_compile.rdata'))
 
     rl_fit<- my_compiledmodel$sample(
                 data = data_for_stan, 
-                iter_sampling = 500,
-                iter_warmup = 500,
-                chains = 2,
-                parallel_chains = 2) 
+                iter_sampling = 1000,
+                iter_warmup = 1000,
+                chains = 4,
+                parallel_chains = 4) 
 
   end_time <- Sys.time()
   end_time-start_time
