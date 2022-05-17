@@ -30,8 +30,8 @@ my_posteriorplot(x       = pars$`population_locations[2]`,
 
 #-------------------------------------------------------------------------------------------------------------
 # individual level parameters
-load(paste0(data_path,'/simulate_individual_parameters.Rdata'))
+load(paste0(path$data,'/simulate_individual_parameters.Rdata'))
 
-my_xyplot(individual_parameters[,'alpha_chosen'],apply(pars$alpha_ch, 2, mean),'true','recovered','navy')
-my_xyplot(individual_parameters[,'beta'],        apply(pars$beta, 2, mean),'true','recovered','navy')
+my_xyplot(individual_parameters[,'alpha'],apply(pars%>%select(starts_with("alpha")), 2, mean),'true','recovered','navy')
+my_xyplot(individual_parameters[,'beta'],        apply(pars%>%select(starts_with("beta")), 2, mean),'true','recovered','navy')
 

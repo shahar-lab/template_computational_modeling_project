@@ -14,7 +14,7 @@ load(paste0(path$data,'/simulate_individual_parameters.Rdata'))
 Nsubjects =dim(individual_parameters)[1] 
 
 #set task variables 
-cfg = list(Nblocks         =4,
+cfg = list(Nblocks         =10,
            Ntrials_perblock=50,
            Narms           =4,  #number of arms in the task 
            Nraffle         =2,  #number of arms offered for selection each trial

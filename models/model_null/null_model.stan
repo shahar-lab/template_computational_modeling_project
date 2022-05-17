@@ -1,5 +1,5 @@
 functions {
-  //first we define the type of variable the function will return (here an array of real numbers)
+  //sampling function (that's why the suffix lp) for the likelihood (array params are currently defined like that but it will be deprecated in the future)
   void null_lp (int Nsubjects,int Nblocks, int Ntrials, int[] Ntrials_per_subject,int Narms,vector Qvalue_initial, int Nraffle, int[,] choice,int[,] reward, int [,] offer1, int [,] offer2,int [,] selected_offer, int [,] first_trial_in_block,vector beta,vector alpha )
   {
 for (subject in 1:Nsubjects){
@@ -16,13 +16,42 @@ for (subject in 1:Nsubjects){
 
         //like function
          selected_offer[subject, trial] ~ categorical_logit(beta[subject] * Qoffer);
-
         //Qvalues update
         Qcard[choice[subject,trial]] += alpha[subject] * (reward[subject,trial] - Qcard[choice[subject,trial]]);
 
       } 
   }
     return;
+    
+}
+// log_likelihood function for leave-one-block-out purposes
+matrix null_log_lik (int Nsubjects,int Nblocks, int Ntrials, int[] Ntrials_per_subject,int Narms,vector Qvalue_initial, int Nraffle, int[,] choice,int[,] reward, int [,] offer1, int [,] offer2,int [,] selected_offer, int [,] first_trial_in_block,vector beta,vector alpha, int [,] fold,real testfold){
+    
+    matrix[Nsubjects,Ntrials]     log_lik;
+    log_lik=rep_matrix(0,Nsubjects,Ntrials);
+
+    for (subject in 1:Nsubjects) {
+        vector[Narms] Qcard; 
+        vector[Nraffle] Qoffer; 
+        
+        Qcard=Qvalue_initial;
+
+        for (trial in 1:Ntrials_per_subject[subject]){
+         
+          //no need to reset q values as each fold is a new block
+          if(fold[subject,trial] == testfold) {
+
+
+          Qoffer[1]=Qcard[offer1[subject,trial]];
+          Qoffer[2]=Qcard[offer2[subject,trial]];
+          
+          log_lik[subject,trial] = categorical_logit_lpmf(selected_offer[subject, trial] | beta[subject] * Qoffer);
+
+          Qcard[choice[subject,trial]] += alpha[subject] * (reward[subject,trial] - Qcard[choice[subject,trial]]);      
+        }
+        }
+  }
+  return log_lik;
 }
 }
 data {
@@ -43,6 +72,9 @@ data {
   int<lower = 0> offer2[Nsubjects,Ntrials];              
   int<lower = 0> selected_offer[Nsubjects,Ntrials];      
   int<lower = 0> first_trial_in_block[Nsubjects,Ntrials];
+  int<lower = 0> fold[Nsubjects,Ntrials]; //this is how we slice the data to training/test sets
+  real           testfold; //this is the number of the block we use as test set
+  int            include_loo; //whether to run loo_block or not.
 }
 
 
@@ -90,3 +122,11 @@ model {
 //Likelihood function per subject per trial
   null_lp(Nsubjects, Nblocks,  Ntrials,  Ntrials_per_subject,Narms,Qvalue_initial, Nraffle, choice,reward,  offer1, offer2,selected_offer,  first_trial_in_block, beta,alpha );
 }
+
+generated quantities {
+  matrix[Nsubjects,Ntrials] fold_log_lik;
+  if (include_loo == 1){
+    
+    fold_log_lik = null_log_lik(Nsubjects, Nblocks,  Ntrials,  Ntrials_per_subject,Narms,Qvalue_initial, Nraffle, choice,reward,  offer1, offer2,selected_offer,  first_trial_in_block, beta,alpha,fold,testfold );
+  }
+} 

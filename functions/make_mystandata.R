@@ -48,7 +48,8 @@ make_mystandata<-function(data, subject_column,block_column,var_toinclude,var_to
                      Nblocks                      =length(blocks_list),
                      Ntrials                      =max_trials_per_subject,  
                      Ntrials_per_subject          =Ntrials_per_subject,
-                     Ntrials_per_subject_per_block=Ntrials_per_subject_per_block),
+                     Ntrials_per_subject_per_block=Ntrials_per_subject_per_block,
+                     fold=t(matrix(block_column,nrow=Ntrials_per_subject,ncol=length(subjects_list)))),
                 mydata)
   
   if (missing(additional_arguments)==F) {mydata=append(mydata,additional_arguments)}
