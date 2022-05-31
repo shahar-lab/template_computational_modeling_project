@@ -11,7 +11,7 @@ run_fit = function(include_loo,data_for_stan,iter_sampling=1000,iter_warmup=1000
           iter_warmup = iter_warmup,
           chains = chains,
           parallel_chains = chains)
-        like = t(as_draws_df(fit$draws(variables="fold_log_lik")))}) #transpose to get a nicer matrix 
+        like = t(as_draws_df(fit$draws(variables="null_model")))}) #transpose to get a nicer matrix 
     return (like)
   }
   else{
