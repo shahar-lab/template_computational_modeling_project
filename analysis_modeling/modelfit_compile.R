@@ -12,7 +12,3 @@ set_cmdstan_path(path = NULL)
 
 my_compiledmodel <- cmdstan_model(paste0(path$model,'model.stan'))
 save(my_compiledmodel, file=paste0(path$data,'/modelfit_compile.rdata'))
-
-
-my_compiledmodel <- stan_model(paste0(path$model,'model_loo.stan'))
-save(my_compiledmodel, file=paste0(path$data,'/modelfit_compile_loo.rdata'))
