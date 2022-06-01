@@ -13,8 +13,7 @@ library(stringr)
 
 #population level parameters
 load(paste0(path$data,'/simulate_population_parameters.Rdata'))
-load(paste0(path$data,'/modelfit_based_on_artificial_data.rdata'))
-rl_fit=readRDS(paste0(path$data,'/modelfit_based_on_empirical_data.rds'))
+rl_fit=readRDS(paste0(path$data,'/modelfit_based_on_artificial_data.rds'))
 
 my_posteriorplot(x       = plogis(rl_fit$draws(variables ='population_locations[1]',
                                                format='draws_matrix')),
@@ -35,8 +34,6 @@ my_posteriorplot(x       = rl_fit$draws(variables ='population_locations[2]',
 #-------------------------------------------------------------------------------------------------------------
 # individual level parameters
 load(paste0(path$data,'/simulate_individual_parameters.Rdata'))
-rl_fit=readRDS(paste0(path$data,'/modelfit_based_on_empirical_data.rds'))
-
 
 my_xyplot(individual_parameters[,'alpha'],apply(rl_fit$draws(variables ='alpha',format='draws_matrix'), 2, mean),'true','recovered','navy')
 my_xyplot(individual_parameters[,'beta'], apply(rl_fit$draws(variables ='beta' ,format='draws_matrix'), 2, mean),'true','recovered','navy')
