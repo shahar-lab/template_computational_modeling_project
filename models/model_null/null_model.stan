@@ -90,16 +90,11 @@ model {
   for (subject in 1:Nsubjects){
     
     matrix[Ntrials,Nraffle] Qoffer;
-    vector[Nraffle] Qoffer_subject;
-    
+    vector[Ntrials] Qdiff;
+
     Qoffer = null_model(Ntrials, Ntrials_per_subject[subject], Narms, Qvalue_initial, Nraffle, choice[subject], reward[subject], offer1[subject], offer2[subject], selected_offer[subject], first_trial_in_block[subject], alpha[subject] );
-    
-    //like function
-    for(trial in 1:Ntrials_per_subject[subject]){
-      Qoffer_subject = to_vector(Qoffer[trial]);
-      selected_offer[subject, trial] ~ categorical_logit(Qoffer_subject*beta[subject]);
-    }
-    
+    Qdiff  = Qoffer[,2]-Qoffer[,1];
+    target+= bernoulli_logit_lpmf(selected_offer[subject, ]|Qdiff*beta[subject]);
   } 
 }
 
