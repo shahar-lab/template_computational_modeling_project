@@ -28,7 +28,7 @@ data {
   int<lower = 1> Ntrials;                                           
   int<lower = 1> Ntrials_per_subject[Nsubjects];                    
   int<lower = 2> Narms;                                             
-  int<lower = 2> Nraffle;                                           
+  int<lower = 2> Nraffle; 
 
 
   //Behavioral data:
@@ -88,10 +88,8 @@ model {
 //Likelihood function per subject per trial
 
   for (subject in 1:Nsubjects){
-    
     matrix[Ntrials,Nraffle] Qoffer;
     vector[Ntrials] Qdiff;
-
     Qoffer = null_model(Ntrials, Ntrials_per_subject[subject], Narms, Qvalue_initial, Nraffle, choice[subject], reward[subject], offer1[subject], offer2[subject], selected_offer[subject], first_trial_in_block[subject], alpha[subject] );
     Qdiff  = Qoffer[,2]-Qoffer[,1];
     target+= bernoulli_logit_lpmf(selected_offer[subject, ]|Qdiff*beta[subject]);
@@ -99,10 +97,17 @@ model {
 }
 
 
-//generated quantities {
-  //matrix[Nsubjects,Ntrials] fold_log_lik;
-  //if (include_loo == 1){
-    
-    //fold_log_lik = null_log_lik(Nsubjects, Nblocks,  Ntrials,  Ntrials_per_subject,Narms,Qvalue_initial, Nraffle, choice,reward,  offer1, offer2,selected_offer,  first_trial_in_block, beta,alpha,fold,testfold );
-  //}
-//} 
+generated quantities {
+  matrix [Nsubjects,Ntrials] log_lik;
+  int y_rep [Nsubjects,Ntrials] ;
+  matrix[Ntrials,Nraffle] Qoffer;
+  vector[Ntrials] Qdiff;
+   for (subject in 1:Nsubjects){
+    for (trial in 1:Ntrials_per_subject[subject]){
+    Qoffer = null_model(Ntrials, Ntrials_per_subject[subject], Narms, Qvalue_initial, Nraffle, choice[subject], reward[subject], offer1[subject], offer2[subject], selected_offer[subject], first_trial_in_block[subject], alpha[subject] );
+    Qdiff  = Qoffer[,2]-Qoffer[,1];
+    log_lik[subject,trial]= bernoulli_logit_lpmf(selected_offer[subject,trial ]|Qdiff[trial]*beta[subject]);
+    y_rep[subject,trial] = bernoulli_logit_rng(log_lik[subject,trial]);
+  } 
+   }
+}
