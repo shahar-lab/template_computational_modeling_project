@@ -46,7 +46,7 @@ for (block in 1:Nblocks){
             trial                = trial,
             first_trial_in_block = (trial==1)*1,
             choice               = choice,
-            selected_offer       = (choice==raffle[2])*1+1,
+            selected_offer       = (choice==raffle[2])*1,
             unchosen             = unchosen,
             offer1               = raffle[1],
             offer2               = raffle[2],
