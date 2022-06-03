@@ -107,7 +107,7 @@ generated quantities {
     Qoffer = null_model(Ntrials, Ntrials_per_subject[subject], Narms, Qvalue_initial, Nraffle, choice[subject], reward[subject], offer1[subject], offer2[subject], selected_offer[subject], first_trial_in_block[subject], alpha[subject] );
     Qdiff  = Qoffer[,2]-Qoffer[,1];
     log_lik[subject,trial]= bernoulli_logit_lpmf(selected_offer[subject,trial ]|Qdiff[trial]*beta[subject]);
-    y_rep[subject,trial] = bernoulli_logit_rng(log_lik[subject,trial]);
+    y_rep[subject,trial] = bernoulli_logit_rng(Qdiff[trial]*beta[subject]);
   } 
    }
 }
