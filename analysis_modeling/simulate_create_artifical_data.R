@@ -7,16 +7,10 @@ source('./functions/my_starter.R')
 #--------------------------------------------------------------------------------------------------------
 
 #load parameters
-load(paste0(path$data,'/modelfit_estimated_parameters_based_on_empirical_data.rdata'))
+load(paste0(path$data,'/artifical_parameters.Rdata'))
 
 #set sample size
-Nsubjects =dim(pars$alpha_ch)[2] 
-parameters=
-cbind(subject=seq(1,Nsubjects),
-           alpha_chosen   =apply(pars$alpha_ch,2,mean),
-           beta           =apply(pars$beta,2,mean),
-           alpha_unchosen =apply(pars$alpha_unch,2,mean))
-
+Nsubjects =dim(artifical_parameters$individual_parameters)[1] 
 
 #set task variables 
 cfg = list(Nblocks         =4,
@@ -26,14 +20,12 @@ cfg = list(Nblocks         =4,
            rndwlk          =read.csv('./functions/rndwlk.csv',header=F))
 
 #run simulation
-source(paste0(path$model,'model.R'))
+source(paste0(path$model,'model.r'))
 
 df=data.frame()
 for (subject in 1:Nsubjects) {
-  df=rbind(df, sim.block(subject=subject, parameters=parameters[subject,],cfg=cfg))
+  df=rbind(df, sim.block(subject=subject, parameters=artifical_parameters$individual_parameters[subject,],cfg=cfg))
 }
 
 #save
-save(df,file=paste0(path$data,'simulate_data_based_on_empirical_parameters.Rdata'))
-
-
+save(df,file=paste0(path$data,'/simulate_data_based_on_artificial_parameters.Rdata'))

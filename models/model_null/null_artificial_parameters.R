@@ -1,0 +1,5 @@
+artifical_parameters=list()
+artifical_parameters$names                  =c('alpha','beta')
+artifical_parameters$transformation         =c('logit','none')
+artifical_parameters$population_location    =c(0.3,4)
+artifical_parameters$population_scale       =c(1,1.5)
