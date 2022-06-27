@@ -1,5 +1,3 @@
-
-
 library(rstan) 
 library(cmdstanr)
 library(posterior)
@@ -15,3 +13,4 @@ library(gridExtra)
 library(svDialogs)
 
 
+library(ramify)
