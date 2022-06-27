@@ -1,10 +1,10 @@
 #Aim:
 #create a quick graphical summary of the artificial parameters that were sampled
 
-plot_artifical_parameters<-function(artifical_parameters,plot_method){
+plot_artifical_parameters<-function(model_parameters,plot_method){
   
     #draw histograms from individual parameters
-    data=as.data.frame(artifical_parameters$individual_parameters)
+    data=as.data.frame(model_parameters$artificial_individual_parameters)
     data_long <- data %>%                        
       pivot_longer(colnames(data)) %>% 
       as.data.frame()
@@ -30,9 +30,9 @@ plot_artifical_parameters<-function(artifical_parameters,plot_method){
     
     
     #generate a table with population parameters
-    x=data.frame(location=artifical_parameters$population_location,
-                 scale   =artifical_parameters$population_scale,
-                 names   =artifical_parameters$names)
+    x=data.frame(location=model_parameters$artificial_population_location,
+                 scale   =model_parameters$artificial_population_scale,
+                 names   =model_parameters$names)
     
     
     ggp2=grid.table(x)

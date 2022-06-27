@@ -7,10 +7,10 @@ source('./functions/my_starter.R')
 #--------------------------------------------------------------------------------------------------------
 
 #load parameters
-load(paste0(path$data,'/artifical_parameters.Rdata'))
+load(paste0(path$data,'/model_parameters.Rdata'))
 
 #set sample size
-Nsubjects =dim(artifical_parameters$individual_parameters)[1] 
+Nsubjects =dim(model_parameters$artificial_individual_parameters)[1] 
 
 #set task variables 
 cfg = list(Nblocks         =4,
@@ -24,8 +24,8 @@ source(paste0(path$model,'model.r'))
 
 df=data.frame()
 for (subject in 1:Nsubjects) {
-  df=rbind(df, sim.block(subject=subject, parameters=artifical_parameters$individual_parameters[subject,],cfg=cfg))
+  df=rbind(df, sim.block(subject=subject, parameters=model_parameters$artificial_individual_parameters[subject,],cfg=cfg))
 }
 
 #save
-save(df,file=paste0(path$data,'/simulate_data_based_on_artificial_parameters.Rdata'))
+save(df,file=paste0(path$data,'/artificial_data.Rdata'))

@@ -14,7 +14,7 @@ library(stringr)
 
 
 #load recovered parameters
-fit=readRDS(paste0(path$data,'/modelfit_recovery.rds'))
+fit=readRDS(paste0(path$data,'/modelfit_empirical.rds'))
 
 #load artificial parameters
 load(paste0(path$data,'/model_parameters.Rdata'))
@@ -42,6 +42,6 @@ my_posteriorplot(x       = fit$draws(variables ='population_locations[2]',
 
 # individual level parameters
 
-my_xyplot(model_parameters$artificial_individual_parameters[,'alpha'],apply(fit$draws(variables ='alpha',format='draws_matrix'), 2, mean),'true','recovered','navy')
-my_xyplot(model_parameters$artificial_individual_parameters[,'beta'], apply(fit$draws(variables ='beta' ,format='draws_matrix'), 2, mean),'true','recovered','navy')
+apply(fit$draws(variables ='alpha',format='draws_matrix'), 2, mean)
+apply(fit$draws(variables ='beta' ,format='draws_matrix'), 2, mean)
 
