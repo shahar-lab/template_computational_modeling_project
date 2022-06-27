@@ -1,5 +1,3 @@
-
-
 library(rstan) 
 library(cmdstanr)
 library(posterior)
@@ -12,4 +10,4 @@ library(tidyr)
 library(lme4)
 library(effects)
 library(gridExtra)
-
+library(ramify)
