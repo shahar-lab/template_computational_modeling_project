@@ -7,7 +7,7 @@ source('./functions/my_starter.R')
 
 
 ###convert to a standata format ###----------------------------------------------------------------------------------
-
+load(paste0(path$data,'/simulate_data_based_on_artificial_parameters.rdata'))
 source('./functions/make_mystandata.R')
 data_for_stan<-make_mystandata(data=df, 
                                subject_column     =df$subject,
