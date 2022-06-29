@@ -8,7 +8,6 @@ mydatatype=set_datatype()
 
 #--------------------------------------------------------------------------------------------------------
 library(ggplot2)
-library(ggpubr)
 library(bayestestR)
 library(stringr)
 
