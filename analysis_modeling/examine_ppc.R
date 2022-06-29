@@ -10,8 +10,8 @@ source('./functions/my_starter.R')
 #--------------------------------------------------------------------------------------------------------
 
 #load stan object
-fit=readRDS(paste0(path$data,'/modelfit_based_on_artificial_data.rds'))
-load(paste0(path$data,'/simulate_data_based_on_artificial_parameters.Rdata'))
+fit=readRDS(paste0(path$data,'/modelfit_recovery.rds'))
+load(paste0(path$data,'/artificial_standata.Rdata'))
 
 #extract y_rep
 y_rep=fit$draws(variables ='y_rep',format="draws_matrix")
@@ -38,8 +38,10 @@ for (sample in 1:nrow(y_rep)) {
 
 df_reoffer_chosen = df%>%filter(reoffer_chosen==1)
 y_rep_stay_card_reoffer_chosen = t(as.matrix(y_rep_stay_card))[df$reoffer_chosen==1,][-1,]
-
-group_vec=as.factor(df_reoffer_chosen$reward_oneback==1)
+stay_rep=fit$draws(variables ='stay_rep',format="draws_matrix")
+stay_rep=stay_rep[,-1]
+stay_card=df$stay_card[-1]
+group_vec=as.factor(df$reward_oneback==1)[-1]
 y_stay_card_reoffer_chosen = (df_reoffer_chosen$stay_card)*1
-ppc_stat_grouped(y_stay_card_reoffer_chosen, t(y_rep_stay_card_reoffer_chosen), group_vec)
+ppc_stat_grouped(stay_card,stay_rep,group_vec)
 
