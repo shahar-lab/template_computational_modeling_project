@@ -20,8 +20,8 @@ if (mydatatype=='artificial'){print('using artificial data')
 #sample
 fit<- my_compiledmodel$sample(
   data = data_for_stan, 
-  iter_sampling = 500,
-  iter_warmup = 200,
+  iter_sampling = 50,
+  iter_warmup = 20,
   chains           = 2,
   parallel_chains  = 2)  
 
