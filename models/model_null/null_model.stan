@@ -98,30 +98,20 @@ model {
 
 
 generated quantities {
-  matrix [Nsubjects,Ntrials] temp_log_lik;
-  matrix [Ntrials,Nsubjects] log_lik; //this has the good dimensions
-  matrix [Nsubjects,Ntrials] temp_y_rep;
-  matrix [Ntrials,Nsubjects] y_rep; //this has the good dimensions
-  matrix [Ntrials,Nsubjects] stay_rep; //whether the same card was chosen
+  matrix[Ntrials,Nsubjects] stay_rep; //whether the same card was chosen
   matrix[Ntrials,Nraffle] Qoffer;
-  real model_choice;
-  real model_choice_oneback;
+  matrix[Ntrials,Nsubjects] model_choice; //the dimensions are inverted to insure a proper output from draws_matrix
   vector[Ntrials] Qdiff;
    for (subject in 1:Nsubjects){
-    model_choice_oneback=0;
     Qoffer = null_model(Ntrials, Ntrials_per_subject[subject], Narms, Qvalue_initial, Nraffle, choice[subject], reward[subject], offer1[subject], offer2[subject], selected_offer[subject], first_trial_in_block[subject], alpha[subject] );
     Qdiff  = Qoffer[,2]-Qoffer[,1];
+    
     for (trial in 1:Ntrials_per_subject[subject]){
-    model_choice           = bernoulli_logit_rng(Qdiff[trial]*beta[subject]); #did you pick offer 2?
-    model_choice           = model_choice*offer2[subject,trial]+(1-model_choice)*offer1[subject,trial]; #which card did you choose
-    stay_rep[trial,subject]= (model_choice==model_choice_oneback);
-    model_choice_oneback   = model_choice;
-
-    temp_log_lik[subject,trial]= bernoulli_logit_lpmf(selected_offer[subject,trial ]|Qdiff[trial]*beta[subject]);
-    temp_y_rep[subject,trial] = bernoulli_logit_rng(logit(exp(temp_log_lik[subject,trial])));
-    //transposing the matrices to get a subject by subject vector.
-    log_lik = temp_log_lik'; 
-    y_rep = temp_y_rep';
+    model_choice[trial,subject]           = bernoulli_logit_rng(Qdiff[trial]*beta[subject]); //did you pick offer 2?
+    model_choice[trial,subject]           = model_choice[trial,subject]*offer2[subject,trial]+(1-model_choice[trial,subject])*offer1[subject,trial]; //which card did you choose?
+    if (trial!=1){
+    stay_rep[trial,subject]= (model_choice[trial,subject]==choice[subject,trial-1]); //did you pick the same card as the previously chosen card by the agent?
+    }
   } 
    }
 }

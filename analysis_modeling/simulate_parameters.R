@@ -12,7 +12,7 @@ source('./functions/my_starter.R')
 
 source(paste0(path$model,'parameters.r'))
 
-Nsubjects=20
+Nsubjects=50
 model_parameters=generate_individual_parameters(model_parameters,Nsubjects)
 
 plot_artifical_parameters(model_parameters, plot_method='dot' )#plotme can be 'dot', 'hist' or 'density'.)
