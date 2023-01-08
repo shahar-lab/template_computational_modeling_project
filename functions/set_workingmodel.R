@@ -10,7 +10,7 @@ load('./functions/working_model.rdata')
 
 mymodel   =dlg_list(mymodels_list, multiple = TRUE)$res
 data_path =paste0('./data/model_',mymodel)
-model_path=paste0('./models/model_',mymodel,'/',mymodel,'_')
+model_path=paste0('./models/model_',mymodel,'/',mymodel)
 cat(paste0(mymodel,
            ' is the current working model',
            '\n',

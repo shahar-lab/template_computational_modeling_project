@@ -1,4 +1,3 @@
-library(rstan) 
 library(cmdstanr)
 library(posterior)
 library(loo)

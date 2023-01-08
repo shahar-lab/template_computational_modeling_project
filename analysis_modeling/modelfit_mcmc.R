@@ -21,9 +21,9 @@ if (mydatatype=='artificial'){print('using artificial data')
 fit<- my_compiledmodel$sample(
   data = data_for_stan, 
   iter_sampling = 500,
-  iter_warmup = 200,
-  chains           = 4,
-  parallel_chains  = 4)  
+  iter_warmup = 500,
+  chains           = 2,
+  cores =2)  
 
 
 #save

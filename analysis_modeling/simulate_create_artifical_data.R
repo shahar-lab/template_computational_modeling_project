@@ -13,14 +13,14 @@ load(paste0(path$data,'/model_parameters.Rdata'))
 Nsubjects =dim(model_parameters$artificial_individual_parameters)[1] 
 
 #set task variables 
-cfg = list(Nblocks         =4,
+cfg = list(Nblocks         =2,
            Ntrials_perblock=100,
-           Narms           =4,  #number of arms in the task 
+           Narms           =2,  #number of arms in the task 
            Nraffle         =2,  #number of arms offered for selection each trial
            rndwlk          =read.csv('./functions/rndwlk.csv',header=F))
 
 #run simulation
-source(paste0(path$model,'model.r'))
+source(paste0(path$model,'.r'))
 
 df=data.frame()
 for (subject in 1:Nsubjects) {
