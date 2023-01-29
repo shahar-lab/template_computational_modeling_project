@@ -43,11 +43,34 @@ parameters {
 transformed parameters {
   vector<lower=0, upper=1>[Nsubjects] alpha;
   vector                  [Nsubjects] beta;
+  matrix                  [Nsubjects,Ntrials] paction;
 
   for (subject in 1:Nsubjects) {
     //set indvidual parameters
     alpha[subject]   = inv_logit(population_locations[1]  + population_scales[1] * alpha_random_effect[subject]);
-    beta[subject]    =          (population_locations[2]  + population_scales[2] * beta_random_effect [subject]) ;
+    beta[subject]    =          (population_locations[2]  + population_scales[2] * beta_random_effect [subject]);
+    
+    
+    //likelihood estimation
+    real PE;
+	  real Qval[Narms]; 
+    vector [Narms]Qnet;
+        
+        for (trial in 1:Ntrials_per_subject[subject]){
+        
+        //reset Qvalues (first trial only)
+    		if (first_trial_in_block[subject,trial] == 1) {
+        Qval = rep_array(0, Narms);
+    		}
+        
+        //calculate probability for each action
+        Qnet    = to_vector(Qval);
+        paction[subject,trial] = categorical_logit(beta[subject] * Qnet)
+     
+        //update Qvalues
+        PE  = reward[subject,trial]  - Qval[choice[subject,trial]];
+        Qval[choice[subject,trial]] = Qval[choice[subject,trial]]+alpha[subject]*PE;
+      }
  
   }
 
@@ -65,32 +88,9 @@ model {
   beta_random_effect  ~ std_normal();
  
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Likelihood function per subject per trial
-
   for (subject in 1:Nsubjects){
+    
+    choice[subject,] ~ categorical_logit(paction[subject,]);
 
-    real PE;
-	  real Qval[Narms]; 
-    vector [Narms]Qnet;
-
-      for (trial in 1:Ntrials_per_subject[subject]){
-        	//reset Qvalues in the start of each block
-    		if (first_trial_in_block[subject,trial] == 1) {
-                  	  	Qval = rep_array(0, Narms);
-    		}
-
-
-        Qnet = to_vector(Qval);
-        //print(Qnet);
-        //print(selected_offer[subject,trial]);
-        //print(beta[subject]);
-        choice[subject,trial] ~ categorical_logit(beta[subject] * Qnet);
-     
-        //PE
-        PE  = reward[subject,trial]  - Qval[choice[subject,trial]];
-        
-        Qval[choice[subject,trial]] = Qval[choice[subject,trial]]+alpha[subject]*PE;
-      }
   }
 }
