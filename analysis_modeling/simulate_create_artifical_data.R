@@ -14,7 +14,7 @@ Nsubjects =dim(model_parameters$artificial_individual_parameters)[1]
 
 #set task variables 
 cfg = list(Nblocks         =2,
-           Ntrials_perblock=100,
+           Ntrials_perblock=50,
            Narms           =2,  #number of arms in the task 
            Nraffle         =2,  #number of arms offered for selection each trial
            rndwlk          =read.csv('./functions/rndwlk.csv',header=F))

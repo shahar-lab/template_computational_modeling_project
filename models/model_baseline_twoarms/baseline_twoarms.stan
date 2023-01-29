@@ -23,7 +23,7 @@ data {
 transformed data{
   int<lower = 1> Nparameters=2; 
   vector[Narms] Qvalue_initial; 
-  Qvalue_initial = rep_vector(0.5, Narms);
+  Qvalue_initial = rep_vector(0, Narms);
 }
 
 
@@ -43,19 +43,17 @@ parameters {
 transformed parameters {
   vector<lower=0, upper=1>[Nsubjects] alpha;
   vector                  [Nsubjects] beta;
-  matrix                  [Nsubjects,Ntrials] paction;
+  matrix                  [Nsubjects,Ntrials] P_ch_action;
+  matrix                  [Nsubjects,Ntrials]Qdiff;
+  real PE;
+	real Qval[Narms]; 
 
   for (subject in 1:Nsubjects) {
     //set indvidual parameters
     alpha[subject]   = inv_logit(population_locations[1]  + population_scales[1] * alpha_random_effect[subject]);
     beta[subject]    =          (population_locations[2]  + population_scales[2] * beta_random_effect [subject]);
-    
-    
     //likelihood estimation
-    real PE;
-	  real Qval[Narms]; 
-    vector [Narms]Qnet;
-        
+
         for (trial in 1:Ntrials_per_subject[subject]){
         
         //reset Qvalues (first trial only)
@@ -64,9 +62,7 @@ transformed parameters {
     		}
         
         //calculate probability for each action
-        Qnet    = to_vector(Qval);
-        paction[subject,trial] = categorical_logit(beta[subject] * Qnet)
-     
+        Qdiff[subject,trial]=Qval[2]-Qval[1];
         //update Qvalues
         PE  = reward[subject,trial]  - Qval[choice[subject,trial]];
         Qval[choice[subject,trial]] = Qval[choice[subject,trial]]+alpha[subject]*PE;
@@ -80,7 +76,7 @@ transformed parameters {
 model {
   
   // population level  
-  population_locations  ~ normal(0, 2);            
+  population_locations  ~ normal(0,2);            
   population_scales     ~ cauchy(0,2);        
 
   // indvidual level  
@@ -89,8 +85,8 @@ model {
  
 
   for (subject in 1:Nsubjects){
-    
-    choice[subject,] ~ categorical_logit(paction[subject,]);
-
+    for (trial in 1:Ntrials_per_subject[subject]){
+    target+= bernoulli_logit_lpmf(selected_offer[subject,trial]|beta[subject]*Qdiff[subject,trial]);
+  }
   }
 }
