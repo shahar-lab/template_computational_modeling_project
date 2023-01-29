@@ -25,7 +25,7 @@ data_for_stan<-make_mystandata(data=df,
                                  'unchosen',
                                  'reward',
                                  'selected_offer'),
-                               additional_arguments=list(Narms=4, Nraffle=2))
+                               additional_arguments=list(Narms=2, Nraffle=2))
 
 #save
 save(data_for_stan,file=paste0(path$data,'/artificial_standata.Rdata'))
