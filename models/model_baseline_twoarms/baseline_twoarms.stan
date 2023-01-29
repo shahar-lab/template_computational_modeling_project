@@ -41,19 +41,22 @@ parameters {
 
 
 transformed parameters {
+  
   vector<lower=0, upper=1>[Nsubjects] alpha;
   vector                  [Nsubjects] beta;
-  matrix                  [Nsubjects,Ntrials] P_ch_action;
-  matrix                  [Nsubjects,Ntrials]Qdiff;
-  real PE;
-	real Qval[Narms]; 
+  matrix                  [Nsubjects,Ntrials] p_ch_action;
+  matrix                  [Nsubjects,Ntrials] Qdiff;
+  real   PE;
+	real   Qval[Narms]; 
 
+  //RL
   for (subject in 1:Nsubjects) {
+    
     //set indvidual parameters
     alpha[subject]   = inv_logit(population_locations[1]  + population_scales[1] * alpha_random_effect[subject]);
     beta[subject]    =          (population_locations[2]  + population_scales[2] * beta_random_effect [subject]);
-    //likelihood estimation
-
+    
+        //likelihood estimation
         for (trial in 1:Ntrials_per_subject[subject]){
         
         //reset Qvalues (first trial only)
@@ -62,7 +65,10 @@ transformed parameters {
     		}
         
         //calculate probability for each action
-        Qdiff[subject,trial]=Qval[2]-Qval[1];
+        Qdiff[subject,trial]       = Qval[2]- Qval[1];
+
+        p_ch_action[subject,trial] = inv_logit(beta[subject]*Qdiff[subject,trial]);
+        
         //update Qvalues
         PE  = reward[subject,trial]  - Qval[choice[subject,trial]];
         Qval[choice[subject,trial]] = Qval[choice[subject,trial]]+alpha[subject]*PE;
@@ -85,8 +91,6 @@ model {
  
 
   for (subject in 1:Nsubjects){
-    for (trial in 1:Ntrials_per_subject[subject]){
-    target+= bernoulli_logit_lpmf(selected_offer[subject,trial]|beta[subject]*Qdiff[subject,trial]);
-  }
+    target+= bernoulli_logit_lpmf(selected_offer[subject,]|beta[subject]*Qdiff[subject,]);
   }
 }
