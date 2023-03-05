@@ -7,8 +7,9 @@ new_modelname=dlg_input(message = "Enter name for your new model:")
 
 mymodels_list=c(mymodels_list,new_modelname$res)
 
-dir.create(paste0('models/model_',new_modelname$res))
-dir.create(paste0('data/model_',new_modelname$res))
+dir.create(paste0('data/stanmodel_',new_modelname$res))
+dir.create(paste0('stan_modeling/models/',new_modelname$res))
+
 
 save(mymodels_list,file='functions/working_model.rdata')
 }
