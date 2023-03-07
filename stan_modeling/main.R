@@ -8,7 +8,7 @@ path=set_workingmodel()
 cfg = list(Nsubjects        = 20,
            Nblocks          = 2,
            Ntrials_perblock = 50,
-           Narms            = 2,  #number of arms in the task 
+           Narms            = 4,  #number of arms in the task 
            Nraffle          = 2,  #number of arms offered for selection each trial
            rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
            )
@@ -59,6 +59,9 @@ fit   = readRDS(paste0(path$data,'/modelfit_recovery.rds'))
 Qdiff = fit$draws(variables ='Qdiff_external',format='draws_matrix')
 Qval1 = fit$draws(variables ='Qval1_external',format='draws_matrix')
 Qval2 = fit$draws(variables ='Qval2_external',format='draws_matrix')
+Qval3 = fit$draws(variables ='Qval3_external',format='draws_matrix')
+Qval4 = fit$draws(variables ='Qval4_external',format='draws_matrix')
+
 PE    = fit$draws(variables ='PE_external',format='draws_matrix')
 
 ####Documentation:------------------
