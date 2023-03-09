@@ -16,6 +16,7 @@ auc(roc)
 Nsamples=ncol(p_ch_action)
 auc_list=list()
 for (sample in 1:Nsamples){
+  print(paste0("sample: ",sample))
   roc=roc(df$selected_offer,p_ch_action[,sample])
   auc=auc(roc)
   auc_list=append(auc_list,auc)
