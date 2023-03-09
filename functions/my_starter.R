@@ -12,6 +12,7 @@ library(svDialogs)
 library(ggdist)
 library(ggpubr)
 library(ramify)
+library(pROC)
 
 source('./stan_modeling/functions/simulate_parameters.R')
 source('./stan_modeling/functions/simulate_create_artifical_data.R')
