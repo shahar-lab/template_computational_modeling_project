@@ -15,6 +15,7 @@ auc(roc)
 #iterate on all samples
 Nsamples=ncol(p_ch_action)
 auc_list=list()
+#you can add a grouping variable to compare your fit for different conditions
 for (sample in 1:Nsamples){
   print(paste0("sample: ",sample))
   roc=roc(df$selected_offer,p_ch_action[,sample])
