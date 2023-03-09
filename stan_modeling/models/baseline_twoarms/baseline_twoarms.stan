@@ -106,6 +106,8 @@ model {
  
 
   for (subject in 1:Nsubjects){
-    target+= bernoulli_logit_lpmf(selected_offer[subject,] | beta[subject] * Qdiff_external[,subject]);
+    for (trial in 1:Ntrials_per_subject[subject]){
+      target+= bernoulli_logit_lpmf(selected_offer[subject,trial] | beta[subject] * Qdiff_external[trial,subject]);
+    }
   }
 }
