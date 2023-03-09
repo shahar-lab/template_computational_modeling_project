@@ -6,6 +6,7 @@ p_ch_action=fit$draws(variables ='p_ch_action',format='draws_matrix')
 #remove missing trials
 p_ch_action[p_ch_action==0]=NA
 p_ch_action = p_ch_action[, !colSums(is.na(p_ch_action))]
+#transform to aligned df
 p_ch_action=as.data.frame(t(p_ch_action))
 #calculate roc
 #print example
