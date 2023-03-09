@@ -1,3 +1,4 @@
+library(pROC)
 #load fit
 fit=readRDS(paste0(path$data,'/modelfit_empirical.rds'))
 p_ch_action=fit$draws(variables ='p_ch_action',format='draws_matrix')
