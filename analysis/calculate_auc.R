@@ -1,10 +1,10 @@
 rm(list=ls())
 source('./functions/my_packages.R')
 source('./functions/my_starter.R')
-#load fit
+#load fit and data
 fit=readRDS(paste0(path$data,'/modelfit_empirical.rds'))
 p_ch_action=fit$draws(variables ='p_ch_action',format='draws_matrix')
-
+load('./data/empirical_data/df.rdata')
 #remove missing trials
 p_ch_action[p_ch_action==0]=NA
 p_ch_action = p_ch_action[, !colSums(is.na(p_ch_action))]
