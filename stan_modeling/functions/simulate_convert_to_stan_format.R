@@ -8,6 +8,7 @@ simulate_convert_to_standata <-function (path,cfg,var_toinclude){
 
 
   #convert
+  df$fold=df$block
   data_for_stan<-make_mystandata(data                 = df, 
                                  subject_column       = df$subject,
                                  block_column         = df$block,

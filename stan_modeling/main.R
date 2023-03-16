@@ -3,6 +3,7 @@ source('./functions/my_starter.R')
 path=set_workingmodel()
 
 
+
 #####simulate data--------------------
 
 cfg = list(Nsubjects        = 20,
@@ -29,7 +30,8 @@ simulate_convert_to_standata(path,cfg,
                               'choice',
                               'unchosen',
                               'reward',
-                              'selected_offer')
+                              'selected_offer',
+                              'fold')
 )
 
 #####sample posterior--------------------
@@ -63,6 +65,22 @@ Qval3 = fit$draws(variables ='Qval3_external',format='draws_matrix')
 Qval4 = fit$draws(variables ='Qval4_external',format='draws_matrix')
 
 PE    = fit$draws(variables ='PE_external',format='draws_matrix')
+
+
+#####compare models--------------------
+
+modelfit_compile_loo(path)
+
+modelfit_mcmc_loo(path,
+              
+              mymcmc = list(
+                datatype = set_datatype() ,
+                samples  = 500,
+                warmup  = 500,
+                chains  = 8,
+                cores   = 8)
+)
+compare=compare_models(path)
 
 ####Documentation:------------------
 #
