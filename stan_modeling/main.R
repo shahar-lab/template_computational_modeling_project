@@ -17,7 +17,8 @@ cfg = list(Nsubjects        = 20,
 simulate_parameters(path,cfg,plotme=T)
 
 simulate_artifical_data(path,cfg)
-load(paste0(path$data,'/artificial_data.Rdata'))
+
+df = get_df(mydatatype = set_datatype(),path, standata = T) #to examine your df
 
 
 simulate_convert_to_standata(path,cfg,

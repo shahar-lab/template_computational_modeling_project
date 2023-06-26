@@ -25,6 +25,7 @@ source('./stan_modeling/functions/examine_mcmc.R')
 source('./stan_modeling/functions/examine_population_parameters_recovery.R')
 source('./stan_modeling/functions/examine_individual_parameters_recovery.R')
 source('./stan_modeling/functions/compare_models.R')
+source('./stan_modeling/functions/get_df.R')
 
 source('./functions/set_workingmodel.r')
 source('./functions/add_workingmodel.r')
