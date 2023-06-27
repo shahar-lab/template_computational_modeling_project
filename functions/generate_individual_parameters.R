@@ -4,9 +4,9 @@
 #and generate individual parameters
 
 generate_individual_parameters=function(model_parameters,Nsubjects,plotme){
-
-#-----------------------------------------------------------
-#sample individual parameters based on the population definitions in 'artifical parameters'  
+  
+  #-----------------------------------------------------------
+  #sample individual parameters based on the population definitions in 'artifical parameters'  
   #pre-allocation
   x=matrix(data = NA, nrow = Nsubjects, ncol = length(model_parameters$names),)
   
@@ -15,18 +15,27 @@ generate_individual_parameters=function(model_parameters,Nsubjects,plotme){
     
     #no transformation
     if(model_parameters$transformation[p]=='none'){
-      
-      x[,p]=(model_parameters$artificial_population_location[p]+
-             model_parameters$artificial_population_scale[p]*rnorm(Nsubjects))
+      if(is.na(model_parameters$artificial_population_scale[p])) {
+        
+        x[,p]=model_parameters$artificial_population_location[p]
+        
+      } else {
+        x[,p]=(model_parameters$artificial_population_location[p]+
+                 model_parameters$artificial_population_scale[p]*rnorm(Nsubjects))
+      }
     }
     
     
     #logit transformation (between 0 to 1)
     if(model_parameters$transformation[p]=='logit'){
-      
-      x[,p]=plogis(qlogis(model_parameters$artificial_population_location[p])+
-                          model_parameters$artificial_population_scale[p]*rnorm(Nsubjects))
-      
+      if(is.na(model_parameters$artificial_population_scale[p])) {
+        
+        x[,p]=plogis(qlogis(model_parameters$artificial_population_location[p]))
+        
+      } else {
+        x[,p]=plogis(qlogis(model_parameters$artificial_population_location[p])+
+                       model_parameters$artificial_population_scale[p]*rnorm(Nsubjects))
+      }
     }
     
     

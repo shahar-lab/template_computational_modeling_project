@@ -16,6 +16,8 @@ cfg = list(Nsubjects        = 20,
 
 simulate_parameters(path,cfg,plotme=T)
 
+df = get_parameters(mydatatype = set_datatype(),path) # To examine your parameters
+
 simulate_artifical_data(path,cfg)
 
 df = get_df(mydatatype = set_datatype(),path, standata = T) #to examine your df
