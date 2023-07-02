@@ -6,23 +6,28 @@ path=set_workingmodel()
 
 #####simulate data--------------------
 
+# task configuration
 cfg = list(Nsubjects        = 20,
-           Nblocks          = 2,
+           Nblocks          = 4,
            Ntrials_perblock = 50,
            Narms            = 4,  #number of arms in the task 
            Nraffle          = 2,  #number of arms offered for selection each trial
            rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
            )
 
+# generate parameters
 simulate_parameters(path,cfg,plotme=T)
 
-df = get_parameters(mydatatype = set_datatype(),path) # To examine your parameters
+# manually examine your parameters
+df = get_parameters(mydatatype = set_datatype(),path) 
 
+# generate trial-by-trial data
 simulate_artifical_data(path,cfg)
 
-df = get_df(mydatatype = set_datatype(),path, standata = T) #to examine your df
+# manually examine your artificial data
+df = get_df(mydatatype = set_datatype(),path, standata = F) 
 
-
+# convert to format that stan likes
 simulate_convert_to_standata(path,cfg,
                              
                              var_toinclude  = c(
@@ -30,12 +35,17 @@ simulate_convert_to_standata(path,cfg,
                               'trial',
                               'offer1',
                               'offer2',
+                              'ucb_offer1',
+                              'ucb_offer2',
                               'choice',
                               'unchosen',
                               'reward',
                               'selected_offer',
                               'fold')
 )
+
+# manually examine your stan data
+df = get_df(mydatatype = set_datatype(),path, standata = T) 
 
 #####sample posterior--------------------
 
@@ -45,10 +55,10 @@ modelfit_mcmc(path,
                
               mymcmc = list(
                 datatype = set_datatype() ,
-                samples  = 1000,
-                warmup  = 700,
-                chains  = 2,
-                cores   = 2)
+                samples  = 200,
+                warmup  = 1000,
+                chains  = 4,
+                cores   = 4)
 )
 
 #examine_mcmc(path) #needs debugging
