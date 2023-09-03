@@ -7,7 +7,7 @@ path=set_workingmodel()
 #####simulate data--------------------
 
 # task configuration
-cfg = list(Nsubjects        = 20,
+cfg = list(Nsubjects        = 150,
            Nblocks          = 4,
            Ntrials_perblock = 50,
            Narms            = 4,  #number of arms in the task 
@@ -55,7 +55,7 @@ modelfit_mcmc(path,
                
               mymcmc = list(
                 datatype = set_datatype() ,
-                samples  = 200,
+                samples  = 250,
                 warmup  = 1000,
                 chains  = 4,
                 cores   = 4)
