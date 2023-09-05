@@ -7,9 +7,9 @@ path=set_workingmodel()
 #####simulate data--------------------
 
 # task configuration
-cfg = list(Nsubjects        = 20,
-           Nblocks          = 4,
-           Ntrials_perblock = 50,
+cfg = list(Nsubjects        = 25,
+           Nblocks          = 2,
+           Ntrials_perblock = 100,
            Narms            = 4,  #number of arms in the task 
            Nraffle          = 2,  #number of arms offered for selection each trial
            rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
