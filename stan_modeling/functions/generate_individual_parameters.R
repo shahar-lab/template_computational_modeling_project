@@ -33,11 +33,26 @@ generate_individual_parameters=function(model_parameters,Nsubjects,plotme){
         x[,p]=plogis(qlogis(model_parameters$artificial_population_location[p]))
         
       } else {
-        x[,p]=plogis(qlogis(model_parameters$artificial_population_location[p])+
-                       model_parameters$artificial_population_scale[p]*rnorm(Nsubjects))
+        logit_mean = qlogis(model_parameters$artificial_population_location[p])
+        logit_sd   = qlogis(model_parameters$artificial_population_location[p] + model_parameters$artificial_population_scale[p]) - qlogis(model_parameters$artificial_population_location[p])
+        x[,p]=plogis(logit_mean + logit_sd*rnorm(Nsubjects))
       }
     }
     
+    
+    
+    
+    #exp transformation (>0)
+    if(model_parameters$transformation[p]=='exp'){
+      if(is.na(model_parameters$artificial_population_scale[p])) {
+        
+        x[,p]=log(exp(model_parameters$artificial_population_location[p]))
+        
+      } else {
+        x[,p]=log(exp(model_parameters$artificial_population_location[p]+
+                      model_parameters$artificial_population_scale[p]*rnorm(Nsubjects)))
+      }
+    }
     
   }
   
