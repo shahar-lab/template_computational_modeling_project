@@ -1,18 +1,24 @@
+source('./functions/check_packages.r')
+
+
 #load project packages
 library(cmdstanr)
 library(posterior)
 library(loo)
 library(doParallel)
+library(foreach)
 library(bayesplot)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(gridExtra)
+library(grid)
 library(svDialogs)
 library(ggdist)
 library(ggpubr)
 library(ramify)
 library(pROC)
+library(patchwork)
 
 source('./stan_modeling/functions/simulate_parameters.R')
 source('./stan_modeling/functions/simulate_create_artifical_data.R')
