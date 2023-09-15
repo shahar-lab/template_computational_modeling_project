@@ -35,7 +35,7 @@ for ( i in 1:Nparameters){
     samples = plogis(samples)
   }
   if (model_parameters$transformation[i]=='exp'){
-    samples = log(samples)
+    samples = exp(samples)
   }
   
   samples    = data.frame(samples=unlist(samples))

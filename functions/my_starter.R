@@ -33,7 +33,7 @@ source('./stan_modeling/functions/examine_individual_parameters_recovery.R')
 source('./stan_modeling/functions/compare_models.R')
 source('./stan_modeling/functions/get_df.R')
 source('./stan_modeling/functions/get_parameters.R')
-source('./stan_modeling/generate_individual_parameters.r')
+source('./stan_modeling/functions/generate_individual_parameters.r')
 
 
 source('./functions/set_workingmodel.r')

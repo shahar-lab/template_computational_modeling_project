@@ -43,6 +43,8 @@ generate_individual_parameters=function(model_parameters,Nsubjects,plotme){
     
     
     #exp transformation (>0)
+    #also - this actually dont do anything (the number are not going to change here)
+    #this is just as a reminder
     if(model_parameters$transformation[p]=='exp'){
       if(is.na(model_parameters$artificial_population_scale[p])) {
         
