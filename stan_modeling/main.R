@@ -7,13 +7,13 @@ path=set_workingmodel()
 #####simulate data--------------------
 
 # task configuration
-cfg = list(Nsubjects        = 25,
+cfg = list(Nsubjects        = 50,
            Nblocks          = 2,
            Ntrials_perblock = 100,
-           Narms            = 4,  #number of arms in the task 
+           Narms            = 2,  #number of arms in the task 
            Nraffle          = 2,  #number of arms offered for selection each trial
            rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
-           )
+)
 
 # generate parameters
 simulate_parameters(path,cfg,plotme=T)
@@ -31,17 +31,15 @@ df = get_df(mydatatype = set_datatype(),path, standata = F)
 simulate_convert_to_standata(path,cfg,
                              
                              var_toinclude  = c(
-                              'first_trial_in_block',
-                              'trial',
-                              'offer1',
-                              'offer2',
-                              'ucb_offer1',
-                              'ucb_offer2',
-                              'choice',
-                              'unchosen',
-                              'reward',
-                              'selected_offer',
-                              'fold')
+                               'first_trial_in_block',
+                               'trial',
+                               'offer1',
+                               'offer2',
+                               'choice',
+                               'unchosen',
+                               'reward',
+                               'selected_offer',
+                               'fold')
 )
 
 # manually examine your stan data
@@ -49,10 +47,10 @@ df = get_df(mydatatype = set_datatype(),path, standata = T)
 
 #####sample posterior--------------------
 
-modelfit_compile(path)
+modelfit_compile(path,format=T)
 
 modelfit_mcmc(path,
-               
+              
               mymcmc = list(
                 datatype = set_datatype() ,
                 samples  = 200,
@@ -61,7 +59,10 @@ modelfit_mcmc(path,
                 cores   = 4)
 )
 
-#examine_mcmc(path) #needs debugging
+mypars=c("population_scales[1]",
+         "population_scales[2]")
+
+examine_mcmc(path,mypars, datatype = set_datatype())
 
 examine_population_parameters_recovery(path)
 
@@ -85,13 +86,13 @@ PE    = fit$draws(variables ='PE_external',format='draws_matrix')
 modelfit_compile_loo(path)
 
 modelfit_mcmc_loo(path,
-              
-              mymcmc = list(
-                datatype = set_datatype() ,
-                samples  = 500,
-                warmup  = 500,
-                chains  = 8,
-                cores   = 8)
+                  
+                  mymcmc = list(
+                    datatype = set_datatype() ,
+                    samples  = 500,
+                    warmup  = 500,
+                    chains  = 8,
+                    cores   = 8)
 )
 compare=compare_models(path)
 
