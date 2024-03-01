@@ -1,49 +1,25 @@
 rm(list=ls())
 source('./functions/my_starter.R')
+
 path=set_workingmodel()
 
 
+#######TODO:#######
+###Create a new data generation function, that askes for datatpe. If artificial - simulates, if empirical loads file.
+###Create a new function that makes an Rdata file ready for stan, with name changes and data manipulations if needed.
+###Extrat posterior sampling (compilation & MCMC) to a new function.
+###Add exmine functions for empirical data.
 
-#####simulate data--------------------
 
-# task configuration
-cfg = list(Nsubjects        = 50,
-           Nblocks          = 2,
-           Ntrials_perblock = 100,
-           Narms            = 2,  #number of arms in the task 
-           Nraffle          = 2,  #number of arms offered for selection each trial
-           rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
-)
-
-# generate parameters
-simulate_parameters(path,cfg,plotme=T)
-
-# manually examine your parameters
-df = get_parameters(mydatatype = set_datatype(),path) 
-
-# generate trial-by-trial data
-simulate_artifical_data(path,cfg)
-
-# manually examine your artificial data
-df = get_df(mydatatype = set_datatype(),path, standata = F) 
-
-# convert to format that stan likes
-simulate_convert_to_standata(path,cfg,
-                             
-                             var_toinclude  = c(
-                               'first_trial_in_block',
-                               'trial',
-                               'offer1',
-                               'offer2',
-                               'choice',
-                               'unchosen',
-                               'reward',
-                               'selected_offer',
-                               'fold')
-)
-
-# manually examine your stan data
-df = get_df(mydatatype = set_datatype(),path, standata = T) 
+#Simulate data
+simulate_artificial_data(
+  cfg = list(Nsubjects        = 5,
+             Nblocks          = 2,
+             Ntrials_perblock = 50,
+             Narms            = 2,  #number of arms in the task 
+             Nraffle          = 2,  #number of arms offered for selection each trial
+             rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
+  ))
 
 #####sample posterior--------------------
 
@@ -53,8 +29,8 @@ modelfit_mcmc(path,
               
               mymcmc = list(
                 datatype = set_datatype() ,
-                samples  = 200,
-                warmup  = 1000,
+                samples  = 1000,
+                warmup  = 2000,
                 chains  = 4,
                 cores   = 4)
 )
