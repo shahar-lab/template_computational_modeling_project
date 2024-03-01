@@ -1,3 +1,7 @@
+# This function allows the user to remove multiple working models from the list
+# of available models. It presents a GUI dialog box allowing the user to select
+# multiple models to remove, and then updates the list of available models accordingly.
+
 remove_multiple_workingmodels <- function() {
     # Load the list of available models
     load('functions/working_model.rdata')
