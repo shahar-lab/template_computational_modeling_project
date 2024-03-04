@@ -1,17 +1,14 @@
+### This function uses task configuration to simulate artificial data using model parameters and task configuartion.
+### the data is saved in a file ready for stan run.
+### to manually examine the data generated in this code, use "get_df" function
 
 simulate_artificial_data <- function(cfg) {
   
   # generate parameters
   simulate_parameters(path,cfg,plotme=T)
-  
-  # manually examine your parameters
-  df = get_parameters(mydatatype = set_datatype(),path) 
-  
+
   # generate trial-by-trial data
   simulate_artifical_data(path,cfg)
-  
-  # manually examine your artificial data
-  df = get_df(mydatatype = set_datatype(),path, standata = F) 
   
   # convert to format that stan likes
   simulate_convert_to_standata(path,cfg,
@@ -27,8 +24,5 @@ simulate_artificial_data <- function(cfg) {
                                  'selected_offer',
                                  'fold')
   )
-  
-  # manually examine your stan data
-  df = get_df(mydatatype = set_datatype(),path, standata = T) 
   
 }

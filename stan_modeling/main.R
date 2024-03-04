@@ -5,10 +5,10 @@ path=set_workingmodel()
 
 
 #######TODO:#######
-###Create a new data generation function, that askes for datatpe. If artificial - simulates, if empirical loads file.
+###Create a new data generation function, that asks for datatpe. If artificial - simulates, if empirical loads file.
 ###Create a new function that makes an Rdata file ready for stan, with name changes and data manipulations if needed.
-###Extrat posterior sampling (compilation & MCMC) to a new function.
-###Add exmine functions for empirical data.
+###Extract posterior sampling (compilation & MCMC) to a new function.
+###Add examine functions for empirical data.
 
 
 #Simulate data
