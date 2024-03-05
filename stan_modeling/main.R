@@ -12,7 +12,7 @@ path=set_workingmodel()
 
 
 #Simulate data
-simulate_artificial_data(
+generate_artificial_data(
   cfg = list(Nsubjects        = 5,
              Nblocks          = 2,
              Ntrials_perblock = 50,
@@ -21,11 +21,15 @@ simulate_artificial_data(
              rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
   ))
 
+#Load empirical data
+data_path = set_standata_file() #add model name to data file name
+
 #####sample posterior--------------------
 
-modelfit_compile(path,format=T)
+modelfit_compile(path,format=F)
 
 modelfit_mcmc(path,
+              data_path = data_path,
               
               mymcmc = list(
                 datatype = set_datatype() ,

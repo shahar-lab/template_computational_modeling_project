@@ -34,6 +34,7 @@ source('./stan_modeling/functions/compare_models.R')
 source('./stan_modeling/functions/get_df.R')
 source('./stan_modeling/functions/get_parameters.R')
 source('./stan_modeling/functions/generate_individual_parameters.r')
+source('./stan_modeling/functions/generate_artificial_data.r')
 
 
 source('./functions/set_workingmodel.r')

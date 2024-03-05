@@ -2,7 +2,7 @@
 ### the data is saved in a file ready for stan run.
 ### to manually examine the data generated in this code, use "get_df" function
 
-simulate_artificial_data <- function(cfg) {
+generate_artificial_data <- function(cfg) {
   
   # generate parameters
   simulate_parameters(path,cfg,plotme=T)

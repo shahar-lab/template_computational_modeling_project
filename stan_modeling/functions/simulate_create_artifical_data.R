@@ -28,10 +28,12 @@ simulate_artifical_data <-function(path,cfg){
     sim.block(subject=subject, 
               parameters=model_parameters$artificial_individual_parameters[subject,],
               cfg=cfg)
-  }
+    }
+  
+  data_path = paste0(path$data,'/artificial_data.Rdata')
 
   #save
-  save(df,file=paste0(path$data,'/artificial_data.Rdata'))
+  save(df,file=data_path)
   cat(paste0('[stan_modeling]:  "artificial_data.Rdata" was saved at "',path$data,'"'))
   
 }
