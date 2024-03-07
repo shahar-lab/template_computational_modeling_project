@@ -18,9 +18,8 @@ simulate_convert_to_standata <-function (path,cfg,var_toinclude){
                                    Nraffle= cfg$Nraffle))
 
   #save
-  save(data_for_stan,file=paste0(path$data,'/artificial_standata.Rdata'))
   save(data_for_stan,file=paste0('data/stan_ready_data_files/artificial_standata_', path$name, '.Rdata'))
-  cat(paste0('[stan_modeling]:  "artificial_standata.Rdata" was saved at "',path$data,'"'))
+  cat(paste0('[stan_modeling]:  "artificial_standata_',path$name,'.Rdata" was saved at stan_ready_data_files. \n Old model data file was overWritten.'))
   
   add_standata_file(paste0('artificial_standata_', path$name, '.Rdata'))
   cat(paste0('[stan_modeling]: Added "artificial_standata.Rdata" to model list'))
