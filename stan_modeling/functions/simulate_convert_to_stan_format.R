@@ -19,10 +19,10 @@ simulate_convert_to_standata <-function (path,cfg,var_toinclude){
 
   #save
   save(data_for_stan,file=paste0(path$data,'/artificial_standata.Rdata'))
-  save(data_for_stan,file=paste0(path$data,'/../stan_ready_data_files/artificial_standata.Rdata'))
+  save(data_for_stan,file=paste0('data/stan_ready_data_files/artificial_standata_', path$name, '.Rdata'))
   cat(paste0('[stan_modeling]:  "artificial_standata.Rdata" was saved at "',path$data,'"'))
   
-  add_standata_file('artificial_standata.Rdata')
+  add_standata_file(paste0('artificial_standata_', path$name, '.Rdata'))
   cat(paste0('[stan_modeling]: Added "artificial_standata.Rdata" to model list'))
   
 }
