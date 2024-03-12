@@ -1,5 +1,5 @@
-### This function uses task configuration to simulate artificial data using model parameters and task configuartion.
-### the data is saved in a file ready for stan run.
+### This function uses task configuration to simulate artificial data using model parameters and task configuration.
+### the data is saved in a file ready for stan run, you can choose the data file with set_standata_file().
 ### to manually examine the data generated in this code, use "get_df" function
 
 generate_artificial_data <- function(cfg) {

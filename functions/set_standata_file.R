@@ -1,3 +1,5 @@
+###This function loads all saved stan-data files and lets the user choose its wanted file.
+
 set_standata_file<-function(){
   load('data/stan_ready_data_files/standata_files.Rdata')
 
