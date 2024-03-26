@@ -1,15 +1,12 @@
 
-modelfit_mcmc <-function(path,mymcmc){
+modelfit_mcmc <-function(path, data_path, mymcmc){
   
 
   #load model
   load(paste0(path$data,'/modelfit_compile.rdata'))
 
   # load data
-  if (mymcmc$datatype=='empirical') {print('using empirical data')
-                              load('./data/empirical_data/standata.Rdata')}
-  if (mymcmc$datatype=='artificial'){print('using artificial data')
-                              load(paste0(path$data,'/artificial_standata.Rdata'))}
+  load(data_path)
 
   #sample
   fit<- my_compiledmodel$sample(

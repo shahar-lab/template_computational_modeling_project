@@ -16,13 +16,13 @@ sim.block = function(subject,parameters,cfg){
   Ntrials_perblock   = cfg$Ntrials_perblock
   expvalues          = cfg$rndwlk
   rownames(expvalues)=c('ev1','ev2','ev3','ev4')
-  Qval               = as.matrix(t(rep(0,Narms)))
+  Qval               = as.matrix(t(rep(0.5,Narms)))
   colnames(Qval)     =sapply(1:Narms, function(n) {paste('Qbandit',n,sep="")})
   df                 =data.frame()
   
 for (block in 1:Nblocks){
   
-  Qval      = as.matrix(t(rep(0,Narms)))
+  Qval      = as.matrix(t(rep(0.5,Narms)))
   
   for (trial in 1:Ntrials_perblock){
 
