@@ -5,8 +5,6 @@ path=set_workingmodel()
 
 
 #######TODO:#######
-###Create a new data generation function, that asks for datatpe. If artificial - simulates, if empirical loads file.
-###Create a new function that makes an Rdata file ready for stan, with name changes and data manipulations if needed.
 ###Extract posterior sampling (compilation & MCMC) to a new function.
 ###Add examine functions for empirical data.
 
@@ -21,8 +19,8 @@ generate_artificial_data(
              rndwlk           = read.csv('./functions/rndwlk.csv',header=F)
   ))
 
-#Load empirical data
-data_path = set_standata_file() #add model name to data file name
+#Load stan data
+data_path = set_standata_file()
 
 #####sample posterior--------------------
 
@@ -42,7 +40,7 @@ modelfit_mcmc(path,
 mypars=c("population_scales[1]",
          "population_scales[2]")
 
-examine_mcmc(path,mypars, datatype = set_datatype())
+examine_mcmc(path, mypars, datatype = set_datatype())
 
 examine_population_parameters_recovery(path)
 
