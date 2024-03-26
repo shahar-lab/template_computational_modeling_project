@@ -4,9 +4,14 @@
 
 add_standata_file<-function(file_name){
   load('data/stan_ready_data_files/standata_files.Rdata')
-
-  standata_files=c(standata_files,file_name)
   
-  save(standata_files, file = "data/stan_ready_data_files/standata_files.rdata")
+  if (!(file_name %in% standata_files))
+    {
+      standata_files=c(standata_files,file_name)
+      
+      save(standata_files, file = "data/stan_ready_data_files/standata_files.rdata")
+      
+  }
 }
+
 
