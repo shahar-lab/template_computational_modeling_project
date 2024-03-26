@@ -47,6 +47,8 @@ source('./functions/set_datatype.r')
 source('./functions/set_data.r')
 source('./functions/add_standata_file.r')
 source('./functions/set_standata_file.R')
+source('./functions/update_standata_files.R')
+update_standata_files()
 
 
 
