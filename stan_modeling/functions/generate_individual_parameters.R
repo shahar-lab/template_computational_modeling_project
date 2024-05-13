@@ -27,6 +27,23 @@ generate_individual_parameters=function(model_parameters,Nsubjects,plotme){
     
     
     #logit transformation (between 0 to 1)
+    if(model_parameters$transformation[p]=='beta'){
+      if(is.na(model_parameters$artificial_population_scale[p])) {
+        
+        x[,p]=model_parameters$artificial_population_location[p]
+        
+      } else {
+        mean = model_parameters$artificial_population_location[p] #just for convenience
+        sd = model_parameters$artificial_population_scale[p]
+        #transform mean and sd to a and b parameters of beta distribution for R sampling.
+        a = mean * ((mean * (1 - mean) / sd^2) - 1)
+        b = (1 - mean) * ((mean * (1 - mean) / sd^2) - 1)
+        x[,p]=rbeta(Nsubjects,a,b)
+      }
+    }
+    
+    
+    #logit transformation (between 0 to 1)
     if(model_parameters$transformation[p]=='logit'){
       if(is.na(model_parameters$artificial_population_scale[p])) {
         
@@ -38,9 +55,6 @@ generate_individual_parameters=function(model_parameters,Nsubjects,plotme){
         x[,p]=plogis(logit_mean + logit_sd*rnorm(Nsubjects))
       }
     }
-    
-    
-    
     
     #exp transformation (>0)
     #also - this actually dont do anything (the number are not going to change here)

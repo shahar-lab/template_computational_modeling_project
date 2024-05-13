@@ -36,7 +36,7 @@ source('./stan_modeling/functions/get_parameters.R')
 source('./stan_modeling/functions/generate_individual_parameters.r')
 source('./stan_modeling/functions/generate_artificial_data.r')
 
-
+source('./functions/DBDA2E-utilities.R')
 source('./functions/set_workingmodel.r')
 source('./functions/add_workingmodel.r')
 source('./functions/my_xyplot.R')

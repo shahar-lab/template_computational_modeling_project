@@ -3,7 +3,7 @@
 ### First save the file in 'data/empirical_data_files' and then add it's name.
 
 add_standata_file<-function(file_name){
-  load('data/stan_ready_data_files/standata_files.Rdata')
+  #load('data/stan_ready_data_files/standata_files.Rdata')
   
   if (!(file_name %in% standata_files))
     {
