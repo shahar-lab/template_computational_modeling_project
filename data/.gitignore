@@ -3,3 +3,4 @@
   # Except this file
 !.gitignore
 !stan_ready_data_files
+!.gitkeep
