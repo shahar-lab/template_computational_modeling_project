@@ -1,12 +1,2 @@
 # Ignore everything in this directory
-*
-  # Except this file
-!.gitignore
-!stanmodel_baseline_fourarms
-!stanmodel_baseline_fourarms_beta
-!stanmodel_baseline_twoarms
-!stanmodel_confirmatory_two_alphas
-!stanmodel_fourarms_two_alphas
-!stan_ready_data_files
-!stan_ready_data_files/*
-!.gitkeep
+empirical_data
