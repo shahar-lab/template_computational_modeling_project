@@ -5,10 +5,10 @@ source('./functions/my_starter.R')
 path = set_workingmodel()
 
 cfg = list(
-  Nsubjects        = 5,
+  Nsubjects        = 100,
   Nblocks          = 2,
-  Ntrials_perblock = 50,
-  Narms            = 2, #number of arms in the task
+  Ntrials_perblock = 200,
+  Narms            = 4, #number of arms in the task
   Nraffle          = 2, #number of arms offered for selection each trial
   rndwlk           = read.csv('./functions/rndwlk.csv', header = F)
 )
@@ -16,7 +16,7 @@ cfg = list(
 
 #####Simulate data--------------------
 generate_artificial_data(cfg = cfg)
-
+load(paste0(path$data,'/artificial_data.Rdata'))
 #####sample posterior--------------------
 
 modelfit_compile(path, format = F)
@@ -27,16 +27,17 @@ modelfit_mcmc(
   
   mymcmc = list(
     datatype = 'artificial' ,
-    samples  = 100,
-    warmup  = 200,
+    samples  = 1000,
+    warmup  = 1000,
     chains  = 4,
-    cores   = 4
+    cores   = 4,
+    refresh = 20
   )
 )
 
 #####examine results--------------------
-mypars = c("population_scales[1]",
-           "population_scales[2]")
+mypars = c("population_locations_transformed[1]",
+           "population_locations[1]")
 
 examine_mcmc(path, mypars, datatype = 'artificial')
 
