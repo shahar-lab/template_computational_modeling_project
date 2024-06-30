@@ -18,8 +18,13 @@ simulate_artifical_data <-function(path,cfg){
   
   doParallel::registerDoParallel(cl = my.cluster)
   library(doParallel)
-  source(paste0(path$model,'.r'))
-  
+  source(paste0(path$model,'.r')) #comment this line for debugging
+  #debug
+  # df=data.frame()
+  # for (subject in 1:Nsubjects) {
+  #   df=rbind(df, sim.block(subject=subject, parameters=model_parameters$artificial_individual_parameters[subject,],cfg=cfg))
+  # }
+  #run
   df<-
   foreach(
     subject = 1:Nsubjects,
