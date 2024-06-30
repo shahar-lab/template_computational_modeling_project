@@ -3,6 +3,8 @@ source('./functions/check_packages.r')
 
 #load project packages
 library(cmdstanr)
+library(brms)
+library(faux)
 library(posterior)
 library(loo)
 library(doParallel)
