@@ -2,7 +2,7 @@
 rm(list = ls())
 source('./functions/my_starter.R')
 
-path = set_workingmodel()
+path = set_workingmodel() 
 
 cfg = list(
   Nsubjects        = 100,
@@ -15,7 +15,7 @@ cfg = list(
 )
 
 if(cfg$splines){
-  cfg$num_knots=5
+  cfg$num_knots=5 
   cfg$basis_matrix=bs(1:(cfg$Ntrials*cfg$Nblocks), df = cfg$num_knots)
 }
 
