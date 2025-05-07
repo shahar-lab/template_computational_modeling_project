@@ -1,11 +1,22 @@
 
-simulate_artifical_data <-function(path,cfg){
+simulate_artifical_data <-function(path,debug,cfg){
 
   #load parameters
   load(paste0(path$data,'/model_parameters.Rdata'))
 
   #set sample size
   Nsubjects =dim(model_parameters$artificial_individual_parameters)[1] 
+  
+ 
+  
+  if(debug){
+    df=data.frame()
+  for (subject in 1:Nsubjects) {
+    df=rbind(df, sim.block(subject=subject, parameters=model_parameters$artificial_individual_parameters[subject,],
+                           cfg=cfg))
+  }
+  }
+  
 
   #run simulation
 
@@ -18,13 +29,8 @@ simulate_artifical_data <-function(path,cfg){
   
   doParallel::registerDoParallel(cl = my.cluster)
   library(doParallel)
-  source(paste0(path$model,'.r')) #comment this line for debugging
-  #debug
-  # df=data.frame()
-  # for (subject in 1:Nsubjects) {
-  #   df=rbind(df, sim.block(subject=subject, parameters=model_parameters$artificial_individual_parameters[subject,],cfg=cfg))
-  # }
-  #run
+  source(paste0(path$model,'.r'))
+  
   df<-
   foreach(
     subject = 1:Nsubjects,

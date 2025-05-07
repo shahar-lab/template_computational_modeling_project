@@ -1,13 +1,6 @@
-examine_mcmc <- function(path, mypars, datatype) {
+examine_mcmc <- function(fit,path, mypars) {
   library(purrr)
-  if (datatype == 'empirical') {
-    print('using empirical data, please wait a bit. Do not use results having rhat>=1.01')
-    fit = readRDS(paste0(path$data, '/modelfit_empirical.rds'))
-  }
-  else if (datatype == 'artificial') {
-    print('using artificial data, please wait a bit. Do not use results having rhat>=1.01')
-    fit = readRDS(paste0(path$data, '/modelfit_recovery.rds'))
-  }
+
   p = list()
   for (i in seq_along(mypars)) {
     pars_matrix <- fit$draws(variables = mypars[i], format = 'matrix')

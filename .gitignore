@@ -5,7 +5,7 @@ misc/
 .Rapp.history
 
 # Session Data files
-
+data/
 
 # User-specific files
 .Ruserdata
