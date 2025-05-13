@@ -19,19 +19,6 @@ convert_to_stan_format <-function (path,data_type,var_toinclude,cfg){
   df$first_trial_in_block[1]=1
   }
   
-  
-  # Create an empty list to store splines per subject
-  basis_matrix_list <- list()
-  
-  for (subject_num in 1:n_subjects) {
-    subject_trials <- df %>% filter(subject == subject_num)%>%pull(overall_trial)  # Get trials for this subject
-    basis_matrix_subject <- bs(subject_trials, df = cfg$num_knots)  # Compute B-splines for this subject
-    basis_matrix_list[[subject_num]] <- as.matrix(basis_matrix_subject)  # Store it
-  }
-  
-  # Combine all splines into a single matrix
-  basis_matrix <- do.call(rbind, basis_matrix_list)  # Stack subject splines into one matrix
-  
 
   
   # Prepare stan_data list
@@ -41,18 +28,36 @@ convert_to_stan_format <-function (path,data_type,var_toinclude,cfg){
     subject_trial = subject_vector,  # Subject IDs for each trial
     Narms=4,
     Nraffle=2,
-    Ndims=2,
-    basis_matrix=cfg$basis_matrix
+    Ndims=2
   )
   for (var in var_toinclude) {
     data_for_stan[[var]] <-  as.vector(df[[var]])
   }
-  # Ensure basis_matrix is ordered correctly
-  
-  data_for_stan$K = ncol(basis_matrix)   # Number of spline basis functions
-  data_for_stan$basis_matrix = basis_matrix    # B-spline basis for trial
   
   
-  save(data_for_stan,file=paste0(path$data,"/simulated_standata.Rdata"))
+  if (cfg$splines) {
+    # Create an empty list to store splines per subject
+    basis_matrix_list <- list()
+    
+    for (subject_num in 1:n_subjects) {
+      subject_trials <- df %>% filter(subject == subject_num) %>%
+        mutate(overall_trial = (block-1)*cfg$Ntrials_perblock + trial) %>%
+        pull(overall_trial)  # Get trials for this subject
+      basis_matrix_subject <- bs(subject_trials, df = cfg$num_knots)  # Compute B-splines for this subject
+      basis_matrix_list[[subject_num]] <- as.matrix(basis_matrix_subject)  # Store it
+    }
+    
+    # Combine all splines into a single matrix
+    basis_matrix <- do.call(rbind, basis_matrix_list)  # Stack subject splines into one matrix
+    
+    data_for_stan$K = cfg$num_knots   # Number of spline basis functions
+    data_for_stan$basis_matrix = basis_matrix    # B-spline basis for trial
+  }
+  
+  if (data_type=="artificial") {
+    save(data_for_stan,file=paste0(path$data,"/artificial_standata.Rdata"))
+  } else {
+    save(data_for_stan,file=paste0(path$data,"/empirical_standata.Rdata"))
+  }
   
 }
