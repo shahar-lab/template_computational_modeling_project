@@ -1,6 +1,7 @@
 data {
   
- int<lower=1> Ndata;                // Total number of trials (for all subjects)
+  int<lower=1> Ndata;                // Total number of trials (for all subjects)
+ 
   int<lower=1> Nsubjects; //number of subjects
 
   int<lower=2> Narms; //number of overall alternatives
@@ -9,8 +10,12 @@ data {
 
   int<lower=2> Ndims; //number of dimensions
   
+  int<lower=1> Ntrials; //number of trials in the task
+  
 
   array [Ndata] int<lower=1, upper=Nsubjects> subject_trial; // Which subject performed each trial
+  
+  array [Ndata] int trial_num; // trial number (within the task) for each trial
 
   //Behavioral data:
 
@@ -34,7 +39,7 @@ data {
 
  // Spline basis for trial
   int<lower=1> K;             // Number of basis functions
-  matrix[Ndata, K] basis_matrix;   // B-spline basis matrix for trial
+  matrix[Ntrials, K] basis_matrix;   // B-spline basis matrix for trial in task
 }
 
 parameters {
@@ -72,7 +77,7 @@ transformed parameters {
 
     for (t in 1:Ndata) {
     alpha_t = alpha_sbj[subject_trial[t]];
-		beta_t[t] = basis_matrix[t] * beta_spline_vector_sbj[subject_trial[t]];
+		beta_t[t] = basis_matrix[trial_num[t]] * beta_spline_vector_sbj[subject_trial[t]];
 
   if (first_trial_in_block[t] == 1) {
       Q_cards=rep_vector(0.5, Narms);

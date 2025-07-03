@@ -46,6 +46,7 @@ source('./functions/run_fit.r')
 source('./functions/plot_artificial_parameters.r')
 source('./functions/set_datatype.r')
 source('./functions/set_data.r')
+source('./functions/create_penalty_matrix.r')
 
 
 

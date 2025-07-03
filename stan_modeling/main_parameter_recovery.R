@@ -15,8 +15,9 @@ cfg = list(
 )
 
 if(cfg$splines){
-  cfg$num_knots=5 
-  cfg$basis_matrix=bs(1:(cfg$Ntrials*cfg$Nblocks), df = cfg$num_knots)
+  cfg$num_knots=10 
+  cfg$basis_matrix=bs(1:(cfg$Ntrials_perblock*cfg$Nblocks), df = cfg$num_knots)
+  cfg$penalty_matrix=create_penalty_matrix(1:(cfg$Ntrials_perblock*cfg$Nblocks), cfg$basis_matrix)
 }
 
 
@@ -32,6 +33,7 @@ load(paste0(path$data,'/artificial_data.Rdata'))
 # convert to format that stan likes
 vars <- c(
   'first_trial_in_block',
+  'trial',
   'ch_card',
   'ch_key',
   'card_left',
@@ -48,11 +50,11 @@ modelfit_compile(path, format = F)
 
 modelfit_mcmc(
   path,
-  data_path = paste0(path$data,'/simulated_standata.Rdata'),
+  data_path = paste0(path$data,'/artificial_standata.Rdata'),
   mymcmc = list(
     datatype = 'artificial' ,
-    samples  = 2000,
-    warmup  = 2000,
+    samples  = 1000,
+    warmup  = 1000,
     chains  = 4,
     cores   = 4
   )
@@ -90,8 +92,6 @@ df$diff_beta <- df$estimated_beta_t - df$beta
 
 library(ggplot2)
 
-library(ggplot2)
-
 # Compute absolute difference
 df$abs_diff_beta <- abs(df$estimated_beta_t - df$beta)
 
@@ -116,7 +116,6 @@ ggplot(df, aes(x = abs_diff_beta)) +
   theme_minimal()
 
 
-library(ggplot2)
 library(dplyr)
 
 # Filter only subjects 1–10 if you want, or leave it for all
@@ -137,3 +136,55 @@ ggplot(df_subset, aes(x = draw_index, y = abs_diff_beta)) +
     title = "Absolute Beta Difference Across Trials per Subject"
   ) +
   theme_minimal()
+
+
+# Plot median posterior beta for each trial
+df_plot = data.frame(subject   = df$subject,
+                     trial     = df %>% mutate(overall_trial = (block-1)*cfg$Ntrials_perblock + trial) %>%
+                       pull(overall_trial),
+                     true_beta = df$beta)
+
+beta_t_summary = apply(fit$draws(variables="beta_t",format='draws_matrix'), 2, function(x) {
+  c(median = median(x), lower = quantile(x, 0.05), upper = quantile(x, 0.95))
+})
+beta_t_summary_df = as.data.frame(t(beta_t_summary))
+colnames(beta_t_summary_df) = c("posterior_median", "posterior_lower", "posterior_upper")
+
+df_plot = cbind(df_plot, beta_t_summary_df)
+beta_trial_summary <- df_plot %>%
+  group_by(trial) %>%
+  summarise(
+    true_median          = median(true_beta),
+    true_lower           = quantile(true_beta, 0.05),
+    true_upper           = quantile(true_beta, 0.95),
+    posterior_median     = median(posterior_median),
+    posterior_lower      = median(posterior_lower),
+    posterior_upper      = median(posterior_upper)
+  )
+
+ggplot(beta_trial_summary, aes(x = trial)) +
+  # Posterior 90% CI ribbon
+  geom_ribbon(
+    aes(ymin = posterior_lower, ymax = posterior_upper),
+    fill = "lightblue", alpha = 0.4
+  ) +
+  # Posterior median line
+  geom_line(aes(y = posterior_median, color = "Recovered β"), linetype = "dashed", size = 1) +
+  
+  # True 90% CI ribbon
+  geom_ribbon(
+    aes(ymin = true_lower, ymax = true_upper),
+    fill = "gray70", alpha = 0.3
+  ) +
+  # True median line
+  geom_line(aes(y = true_median, color = "True β"), linetype = "solid", size = 1) +
+  
+  scale_color_manual(values = c("Recovered β" = "steelblue", "True β" = "black")) +
+  labs(
+    title = "Posterior vs. True β Across Trials",
+    x = "Trial",
+    y = "β value",
+    color = ""
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))

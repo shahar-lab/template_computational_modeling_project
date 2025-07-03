@@ -1,6 +1,6 @@
 
 
-examine_individual_parameters_recovery <-function(path) {
+examine_individual_parameters_recovery <-function(fit,path) {
 
 library(ggplot2)
 library(bayestestR)
@@ -16,9 +16,6 @@ library(ggpubr)
           legend.position= "right",
           plot.title     = element_text(hjust = 0.5))
 
-#load recovered parameters
-fit=readRDS(paste0(path$data,'/modelfit_recovery.rds'))
-
 #load artificial parameters
 source(paste0(path$model,'_parameters.r'))
 load(paste0(path$data,'/model_parameters.Rdata'))
@@ -26,10 +23,12 @@ load(paste0(path$data,'/model_parameters.Rdata'))
 
 Nparameters = length(model_parameters$artificial_population_location)
 p=list()
-for ( i in 1:Nparameters){
+for (i in 1:Nparameters){
+  param_name <- model_parameters$names[i]
+  stan_var   <- paste0(param_name, '_sbj')
   p[[i]]=
-  my_xyplot(model_parameters$artificial_individual_parameters[,model_parameters$names[i]],
-            apply(fit$draws(variables =model_parameters$names[i],format='draws_matrix'), 2, mean),
+  my_xyplot(model_parameters$artificial_individual_parameters[,param_name],
+            apply(fit$draws(variables=stan_var,format='draws_matrix'), 2, mean),
             'true',
             'recovered',
             'navy')+

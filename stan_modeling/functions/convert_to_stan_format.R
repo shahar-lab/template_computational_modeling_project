@@ -26,9 +26,12 @@ convert_to_stan_format <-function (path,data_type,var_toinclude,cfg){
     Ndata = n_total_trials,  # Total number of trials
     Nsubjects = n_subjects,  # Number of subjects
     subject_trial = subject_vector,  # Subject IDs for each trial
-    Narms=4,
-    Nraffle=2,
-    Ndims=2
+    Narms = cfg$Narms,
+    Nraffle = cfg$Nraffle,
+    Ndims = 2,
+    Ntrials = cfg$Ntrials_perblock*cfg$Nblocks, # Number of trials in the task
+    trial_num = df %>% mutate(overall_trial = (block-1)*cfg$Ntrials_perblock + trial) %>%
+      pull(overall_trial)
   )
   for (var in var_toinclude) {
     data_for_stan[[var]] <-  as.vector(df[[var]])
@@ -36,22 +39,9 @@ convert_to_stan_format <-function (path,data_type,var_toinclude,cfg){
   
   
   if (cfg$splines) {
-    # Create an empty list to store splines per subject
-    basis_matrix_list <- list()
-    
-    for (subject_num in 1:n_subjects) {
-      subject_trials <- df %>% filter(subject == subject_num) %>%
-        mutate(overall_trial = (block-1)*cfg$Ntrials_perblock + trial) %>%
-        pull(overall_trial)  # Get trials for this subject
-      basis_matrix_subject <- bs(subject_trials, df = cfg$num_knots)  # Compute B-splines for this subject
-      basis_matrix_list[[subject_num]] <- as.matrix(basis_matrix_subject)  # Store it
-    }
-    
-    # Combine all splines into a single matrix
-    basis_matrix <- do.call(rbind, basis_matrix_list)  # Stack subject splines into one matrix
-    
     data_for_stan$K = cfg$num_knots   # Number of spline basis functions
-    data_for_stan$basis_matrix = basis_matrix    # B-spline basis for trial
+    data_for_stan$basis_matrix = cfg$basis_matrix    # B-spline basis for trial
+    data_for_stan$penalty_matrix = cfg$penalty_matrix   # Penalty matrix
   }
   
   if (data_type=="artificial") {

@@ -15,7 +15,7 @@ sim.block = function(subject,parameters,cfg){
   
   #set initial var
   Narms              = cfg$Narms
-  Ntrials=cfg$Ntrials
+  Ntrials            = cfg$Ntrials_perblock
   Nraffle            = cfg$Nraffle
   Nblocks            = cfg$Nblocks
   Ndims              = cfg$Ndims
