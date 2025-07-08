@@ -1,8 +1,4 @@
-convert_to_stan_format <-function (path,data_type,var_toinclude,cfg){
-  
-  
-  #load data
-  load(paste0(path$data,"/artificial_data.Rdata"))
+convert_to_stan_format <-function (path,df,data_type,var_toinclude,cfg){
   
   # Number of subjects and trials per subject (based on your matrix dimensions)
   n_subjects <- length(unique(df$subject))  # Number of subjects (rows)
@@ -39,7 +35,7 @@ convert_to_stan_format <-function (path,data_type,var_toinclude,cfg){
   
   
   if (cfg$splines) {
-    data_for_stan$K = cfg$num_knots   # Number of spline basis functions
+    data_for_stan$K = cfg$K   # Number of spline basis functions
     data_for_stan$basis_matrix = cfg$basis_matrix    # B-spline basis for trial
     data_for_stan$penalty_matrix = cfg$penalty_matrix   # Penalty matrix
   }

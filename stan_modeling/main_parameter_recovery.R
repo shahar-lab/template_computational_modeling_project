@@ -15,8 +15,8 @@ cfg = list(
 )
 
 if(cfg$splines){
-  cfg$num_knots=10 
-  cfg$basis_matrix=bs(1:(cfg$Ntrials_perblock*cfg$Nblocks), df = cfg$num_knots)
+  cfg$K=5 
+  cfg$basis_matrix=bs(1:(cfg$Ntrials_perblock*cfg$Nblocks), df = cfg$K)
   cfg$penalty_matrix=create_penalty_matrix(1:(cfg$Ntrials_perblock*cfg$Nblocks), cfg$basis_matrix)
 }
 
@@ -42,7 +42,7 @@ vars <- c(
   'selected_offer'
 )
 
-convert_to_stan_format(path,data_type="artificial",vars,cfg)
+convert_to_stan_format(path,df,data_type="artificial",vars,cfg)
 
 #####sample posterior--------------------
 

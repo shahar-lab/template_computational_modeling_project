@@ -37,6 +37,7 @@ source('./stan_modeling/functions/compare_models.R')
 source('./stan_modeling/functions/get_df.R')
 source('./stan_modeling/functions/get_parameters.R')
 source('./stan_modeling/functions/generate_individual_parameters.r')
+source('./stan_modeling/functions/create_penalty_matrix.r')
 
 source('./functions/set_workingmodel.r')
 source('./functions/add_workingmodel.r')
@@ -46,7 +47,6 @@ source('./functions/run_fit.r')
 source('./functions/plot_artificial_parameters.r')
 source('./functions/set_datatype.r')
 source('./functions/set_data.r')
-source('./functions/create_penalty_matrix.r')
 
 
 
